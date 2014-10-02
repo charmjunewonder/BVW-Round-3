@@ -10,7 +10,8 @@ public class JamoDrum : MonoBehaviour
 {
 	public int[] spinDelta = new int[4];
 	public bool[] hit = new bool[4];
-	
+	public GameObject[] spinners = new GameObject[4];
+
 	private static JamoDrumClient jod = null;
 	
 	private ETC.Platforms.HitEventHandler hitEvents;
@@ -86,11 +87,14 @@ public class JamoDrum : MonoBehaviour
 	public void InjectHit(int controllerID)
 	{
 		CallHitEvents(controllerID);
+		Debug.Log ("hit");
 	}
 	
 	public void InjectSpin(int controllerID, int delta)
 	{
 		CallSpinEvents(controllerID, delta);
+		Debug.Log ("spin");
+
 	}
 	
 	void LateUpdate()
