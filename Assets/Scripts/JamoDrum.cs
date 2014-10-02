@@ -11,7 +11,7 @@ public class JamoDrum : MonoBehaviour
 	public int[] spinDelta = new int[4];
 	public bool[] hit = new bool[4];
 	public GameObject[] spinners = new GameObject[4];
-
+	public GameObject spaceShip;
 	private static JamoDrumClient jod = null;
 	
 	private ETC.Platforms.HitEventHandler hitEvents;
@@ -87,14 +87,20 @@ public class JamoDrum : MonoBehaviour
 	public void InjectHit(int controllerID)
 	{
 		CallHitEvents(controllerID);
-		Debug.Log ("hit");
+		Debug.Log ("hit "+ controllerID);
 	}
 	
 	public void InjectSpin(int controllerID, int delta)
 	{
 		CallSpinEvents(controllerID, delta);
-		Debug.Log ("spin");
-
+//		Quaternion q = spinners [controllerID-1].transform.rotation;
+//		spinners [controllerID-1].transform.rotation =  new Quaternion(q.x, q.y, q.z, 0);
+		spinners [controllerID - 1].transform.Rotate (0, delta, 0);
+		//Debug.Log ("spin " + controllerID + " " + delta);
+		Vector3 forceDirection = spaceShip.transform.position - spinners [controllerID - 1].transform.position;
+		forceDirection.y = 0;
+		spaceShip.rigidbody.AddForce(forceDirection.normalized * Mathf.Abs(delta) * -1, ForceMode.VelocityChange);
+		Debug.Log (spaceShip.rigidbody.constantForce);
 	}
 	
 	void LateUpdate()
