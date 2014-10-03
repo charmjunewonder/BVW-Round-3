@@ -10,6 +10,8 @@ public class JamODrumExample : MonoBehaviour {
 	public GameObject star;
 	public float[] degPerTick = new float[4];
 	public float[] spinnerAngle = new float[4];
+
+	public GameObject spaceShip;
 	private float[] initAngle = new float[4];
 	
 	private bool once;
@@ -31,7 +33,7 @@ public class JamODrumExample : MonoBehaviour {
 		for(int i=0; i<4; i++) {
 			//spin
 			if(Mathf.Abs(jod.spinDelta[i]) > 0) {
-				Debug.Log("EXAMPLE SPIN "+i);
+//				Debug.Log("EXAMPLE SPIN "+i);
 				spinnerAngle[i] += jod.spinDelta[i] * degPerTick[i];
 				//spinnerAngle[i] += jod.spinDelta[i];
 				Debug.Log("Spin "+i+" : "+jod.spinDelta[i]);
@@ -39,10 +41,14 @@ public class JamODrumExample : MonoBehaviour {
 				Vector3 rot = spinners[i].transform.rotation.eulerAngles;
 				rot.y = initAngle[i] + spinnerAngle[i];
 				spinners[i].transform.rotation = Quaternion.Euler(rot);
+
+				Vector3 forceDirection = spaceShip.transform.position - spinners [i].transform.position;
+				forceDirection.y = 0;
+				spaceShip.rigidbody.AddForce(forceDirection.normalized * Mathf.Abs(jod.spinDelta[i]) * -1, ForceMode.VelocityChange);
 			}
 			//hit
-			if(jod.hit[i]) {
-				Debug.Log("EXAMPLE HIT "+i);
+			if(jod.hits[i] > 0) {
+//				Debug.Log("EXAMPLE HIT "+i);
 				GameObject starInst = (GameObject)Instantiate(star);
 				starInst.renderer.material = starMaterials[i];
 				switch (i){
@@ -68,10 +74,10 @@ public class JamODrumExample : MonoBehaviour {
 	}
 	
 	public void SpinHandler(int controllerID, int delta) {
-		Debug.Log("SPIN EVENT "+(controllerID-1));
+//		Debug.Log("SPIN EVENT "+(controllerID-1));
 	}
 		
 	public void HitHandler(int controllerID) {
-		Debug.Log("HIT EVENT "+(controllerID-1));
+//		Debug.Log("HIT EVENT "+(controllerID-1));
 	}
 }

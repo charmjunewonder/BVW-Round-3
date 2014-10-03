@@ -1,34 +1,52 @@
- using UnityEngine;
+//Jam-o-Drum unity interface
+//Orignal version by Bryan Maher (27-Jan-2012)
+//Updated by Andrew Roxby 2/29/12
+
+using UnityEngine;
 using System.Collections;
 using ETC.Platforms;
 
-public class JamoDrum : MonoBehaviour {
-	
-	/// <summary>
-	/// This is an instance of the JamoDrumClient used to receive
-	/// user input.  DO NOT make more than one instance of the
-	/// JamoDrumClient.  It just occurred to me that JamoDrumClient
-	/// should be a Singleton.  I will make that change, expect it
-	/// to be coming soon.
-	/// 
-	/// Bryan (27-Jan-2012)
-	/// </summary>
-	private JamoDrumClient jod;
-	
+public class JamoDrum : MonoBehaviour
+{
 	public int[] spinDelta = new int[4];
-	public bool[] hit = new bool[4];
-	public GameObject[] spinners = new GameObject[4];
-	public GameObject spaceShip;
-	// Use this for initialization
-	void Start () {
-		if(!Application.isEditor) {
-			Screen.showCursor = false;
-		}
-		jod = JamoDrumClient.Instance;
+	public int[] hits = new int[4];
+	
+	private static JamoDrumClient jod = null;
+	
+	private ETC.Platforms.HitEventHandler hitEvents;
+	private ETC.Platforms.SpinEventHandler spinEvents;
+	
+	void Start()
+	{
+		if(!Application.isEditor) Screen.showCursor = false;
+		if(jod==null) jod = JamoDrumClient.Instance;
+		
 		jod.Hit += HandleJodHit;
 		jod.Spin += HandleJodSpin;
+		
+		hitEvents += DummyMethodPreventsEmptyCallbacks;
+		spinEvents += DummyMethodPreventsEmptyCallbacks;
 	}
-
+	
+	void DummyMethodPreventsEmptyCallbacks(int controllerID)
+	{
+	}
+	
+	void DummyMethodPreventsEmptyCallbacks(int controllerID, int delta)
+	{
+	}
+	
+	/// <summary>
+	/// This is the code that is run when a pad is hit.
+	/// </summary>
+	/// This is a number from 1 to 4 indicating which controller
+	/// is sending the message.
+	/// </param>
+	public void HandleJodHit(int controllerID)
+	{
+		hits[controllerID - 1]++;
+	}
+	
 	/// <summary>
 	/// This is the code that runs when any one of the
 	/// spinners is rotated.
@@ -49,83 +67,48 @@ public class JamoDrum : MonoBehaviour {
 	/// the number to degrees of rotation.
 	/// </param>
 	public void HandleJodSpin(int controllerID, int delta)
+	{		
+		spinDelta[controllerID - 1] += delta;
+	}
+	
+	public void AddHitEvent(HitEventHandler func)
 	{
-		//Debug.Log("Spin!");		
-	
-		switch (controllerID)
-		{
-			case 1:
-				// Station 1 rotates the cube around the X axis.
-				spinDelta[0] += delta;					
-				break;
-			case 2:
-				// Station 2 rotates the cube around the Y axis.
-				spinDelta[1] += delta;
-				break;
-			case 3:
-				// Station 3 rotates the cube around the Z axis.
-				spinDelta[2] += delta;
-				break;
-			case 4:
-				// There aren't 4 axes so station 4 gets to rotate them all.
-				spinDelta[3] += delta;
-				break;
-		}		
-		spinners [controllerID - 1].transform.Rotate (0, delta, 0);
-		//Debug.Log ("spin " + controllerID + " " + delta);
-		Vector3 forceDirection = spaceShip.transform.position - spinners [controllerID - 1].transform.position;
-		forceDirection.y = 0;
-		spaceShip.rigidbody.AddForce(forceDirection.normalized * Mathf.Abs(delta) * -1, ForceMode.VelocityChange);
+		hitEvents += func;
 	}
 	
-	/// <summary>
-	/// This is the code that is run when a pad is hit.
-	/// </summary>
-	/// This is a number from 1 to 4 indicating which controller
-	/// is sending the message.
-	/// </param>
-	public void HandleJodHit(int controllerID)
+	public void AddSpinEvent(SpinEventHandler func)
 	{
-		// Nothing is being done with pad hits other than logging them.
-		// You can check the log file in the EXE directory to see them
-		// show up.  No, really, you can.
-		Debug.Log("Hit!");
-		
-		switch (controllerID)
+		spinEvents += func;
+	}
+	
+	public void InjectHit(int controllerID)
+	{
+		hitEvents(controllerID);
+	}
+	
+	public void InjectSpin(int controllerID, int delta)
+	{
+		spinEvents(controllerID, delta);
+	}
+	
+	void Update()
+	{
+		for(int i = 0; i<4; i++)
 		{
-			case 1:
-				// Station 1 rotates the cube around the X axis.
-				hit[0] = true;					
-				break;
-			case 2:
-				// Station 2 rotates the cube around the Y axis.
-				hit[1] = true;
-				break;
-			case 3:
-				// Station 3 rotates the cube around the Z axis.
-				hit[2] = true;
-				break;
-			case 4:
-				// There aren't 4 axes so station 4 gets to rotate them all.
-				hit[3] = true;
-				break;
-		}	
+			for(int n = 0; n<hits[i]; n++)
+			{
+				hitEvents(i+1);
+			}
+			if(spinDelta[i]!=0) spinEvents(i+1, spinDelta[i]);
+		}
 	}
 	
-	public void AddSpinEvent(SpinEventHandler func) {
-		jod.Spin += func;
-	}
-	
-	public void AddHitEvent(HitEventHandler func) {
-		jod.Hit += func;
-	}
-	
-	// Update is called once per frame
-	void LateUpdate () 
-	{	
-		for(int i = 0; i < 4; i++) {
+	void LateUpdate()
+	{
+		for(int i = 0; i < 4; i++)
+		{
 			spinDelta[i] = 0;
-			hit[i] = false;
+			hits[i] = 0;
 		}
 	}
 }

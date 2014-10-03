@@ -15,7 +15,7 @@ public class BombPower : MonoBehaviour
 		// Update is called once per frame
 		void Update ()
 		{
-				if (jod.hit [0] == true && jod.hit [1] == true && jod.hit [2] == true && jod.hit [3] == true && bombenable == true) {
+		if (jod.hits [0] > 0 && jod.hits [1] > 0 && jod.hits [2] > 0 && jod.hits [3] > 0 && bombenable == true) {
 						Destroy (meteor);
 						Destroy (gameObject);
 				}
