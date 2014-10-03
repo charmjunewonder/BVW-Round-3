@@ -15,9 +15,15 @@ public class JamODrumExample : MonoBehaviour {
 	private float[] initAngle = new float[4];
 	
 	private bool once;
-	
+	private Vector3[] direction;
 	// Use this for initialization
 	void Start () {
+		direction = new Vector3[4];
+		direction [0] = new Vector3 (-1, 0, 1);
+		direction [1] = new Vector3 (1, 0, 1);
+		direction [2] = new Vector3 (1, 0, -1);
+		direction[3] = new Vector3(-1, 0, -1);
+
 		for(int i=0; i<4; i++) {
 			initAngle[i] = spinners[i].transform.rotation.eulerAngles.y;
 		}
@@ -42,9 +48,13 @@ public class JamODrumExample : MonoBehaviour {
 				rot.y = initAngle[i] + spinnerAngle[i];
 				spinners[i].transform.rotation = Quaternion.Euler(rot);
 
+
 				Vector3 forceDirection = spaceShip.transform.position - spinners [i].transform.position;
 				forceDirection.y = 0;
-				spaceShip.rigidbody.AddForce(forceDirection.normalized * Mathf.Abs(jod.spinDelta[i]) * -1, ForceMode.VelocityChange);
+				Vector3 force = new Vector3(1, 0, 1);
+//				spaceShip.rigidbody.AddForce(forceDirection.normalized * Mathf.Abs(jod.spinDelta[i]) * -1, ForceMode.VelocityChange);
+				spaceShip.rigidbody.AddForce(direction[i], ForceMode.VelocityChange);
+
 			}
 			//hit
 			if(jod.hits[i] > 0) {
