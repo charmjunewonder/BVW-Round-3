@@ -49,32 +49,12 @@ public class JamODrumExample : MonoBehaviour {
 				spinners[i].transform.rotation = Quaternion.Euler(rot);
 
 
-				Vector3 forceDirection = spaceShip.transform.position - spinners [i].transform.position;
-				forceDirection.y = 0;
-				Vector3 force = new Vector3(1, 0, 1);
-//				spaceShip.rigidbody.AddForce(forceDirection.normalized * Mathf.Abs(jod.spinDelta[i]) * -1, ForceMode.VelocityChange);
-				spaceShip.rigidbody.AddForce(direction[i], ForceMode.VelocityChange);
+
 
 			}
 			//hit
 			if(jod.hits[i] > 0) {
-//				Debug.Log("EXAMPLE HIT "+i);
-				GameObject starInst = (GameObject)Instantiate(star);
-				starInst.renderer.material = starMaterials[i];
-				switch (i){
-				case 0:
-					starInst.transform.position = new Vector3(-5, 35, 5);
-					break;
-				case 1:
-					starInst.transform.position = new Vector3(5, 35, 5);
-					break;
-				case 2:
-					starInst.transform.position = new Vector3(5, 35, -5);
-					break;
-				case 3:
-					starInst.transform.position = new Vector3(-5, 35, -5);
-					break;
-				}
+				spaceShip.rigidbody.AddForce(direction[i] * 2, ForceMode.VelocityChange);
 			}
 		}
 		

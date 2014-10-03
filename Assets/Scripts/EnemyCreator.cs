@@ -25,6 +25,7 @@ public class EnemyCreator : MonoBehaviour
 
 		void SpawnMeteor ()
 		{
-				Instantiate (meteor, (new Vector3 ((float)random.Next (-21, 21), 1, (float)random.Next (-21, 21))), Quaternion.identity);
+			GameObject g = Instantiate (meteor, (new Vector3 ((float)random.Next (-21, 21), 1, (float)random.Next (-21, 21))), Quaternion.identity) as GameObject;
+			g.transform.parent = transform;
 		}
 }

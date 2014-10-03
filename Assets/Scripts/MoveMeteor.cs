@@ -20,6 +20,7 @@ public class MoveMeteor : MonoBehaviour
 		{
 				transform.position = Vector3.Lerp (transform.position, randpos, Time.deltaTime * smoother);
 				if (Mathf.Abs ((transform.position.x) - (randpos.x)) < 6) {
+					rigidbody.AddForce(new Vector3(random.Next (-1, 1), 0, random.Next (-1, 1)));
 						ChangePos ();
 				}
 				if (Mathf.Abs ((transform.position.z) - (randpos.z)) < 6) {
