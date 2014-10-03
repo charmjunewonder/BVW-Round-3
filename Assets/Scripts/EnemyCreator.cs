@@ -12,6 +12,9 @@ public class EnemyCreator : MonoBehaviour
 		{
 				random = new System.Random ();
 				SpawnMeteor ();
+				for (int i = 0; i < 10; ++i) {
+					SpawnMeteor ();
+				}
 		}
 	
 		// Update is called once per frame
