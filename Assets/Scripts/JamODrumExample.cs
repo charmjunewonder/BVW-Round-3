@@ -33,7 +33,7 @@ public class JamODrumExample : MonoBehaviour {
 		for(int i=0; i<4; i++) {
 			//spin
 			if(Mathf.Abs(jod.spinDelta[i]) > 0) {
-//				Debug.Log("EXAMPLE SPIN "+i);
+				Debug.Log("EXAMPLE SPIN "+i);
 				spinnerAngle[i] += jod.spinDelta[i] * degPerTick[i];
 				//spinnerAngle[i] += jod.spinDelta[i];
 				Debug.Log("Spin "+i+" : "+jod.spinDelta[i]);
@@ -71,6 +71,11 @@ public class JamODrumExample : MonoBehaviour {
 		if(Input.GetKeyUp(KeyCode.Escape)){
 			Application.Quit();
 		}
+		for(int i = 0; i < 4; i++)
+		{
+			jod.spinDelta[i] = 0;
+			jod.hits[i] = 0;
+		}
 	}
 	
 	public void SpinHandler(int controllerID, int delta) {
@@ -80,4 +85,5 @@ public class JamODrumExample : MonoBehaviour {
 	public void HitHandler(int controllerID) {
 //		Debug.Log("HIT EVENT "+(controllerID-1));
 	}
+	
 }

@@ -89,6 +89,8 @@ public class JamoDrum : MonoBehaviour
 	public void InjectSpin(int controllerID, int delta)
 	{
 		spinEvents(controllerID, delta);
+		spinDelta[controllerID - 1] += delta;
+
 	}
 	
 	void Update()
