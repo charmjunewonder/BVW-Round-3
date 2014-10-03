@@ -19,9 +19,9 @@ public class JamoKey : MonoBehaviour
 		if(jamoDrum==null) return;
 		for(int i = 0; i<4; i++)
 		{
-			if(Input.GetKey(spinLeft[i])) jamoDrum.InjectSpin(i+1, -spinsPerFrame);
-			if(Input.GetKey(spinRight[i])) jamoDrum.InjectSpin(i+1, spinsPerFrame);
-			if(Input.GetKeyDown(hit[i])) jamoDrum.InjectHit(i+1);
+			if(Input.GetKey(spinLeft[i])) jamoDrum.HandleJodSpin(i+1, -spinsPerFrame);
+			if(Input.GetKey(spinRight[i])) jamoDrum.HandleJodSpin(i+1, spinsPerFrame);
+			if(Input.GetKeyDown(hit[i])) jamoDrum.HandleJodHit(i+1);
 		}
 	}
 }
