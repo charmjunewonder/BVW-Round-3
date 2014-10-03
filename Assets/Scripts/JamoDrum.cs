@@ -107,10 +107,10 @@ public class JamoDrum : MonoBehaviour
 	
 	void LateUpdate()
 	{
-		for(int i = 0; i < 4; i++)
-		{
-			spinDelta[i] = 0;
-			hits[i] = 0;
-		}
+//		for(int i = 0; i < 4; i++)
+//		{
+//			spinDelta[i] = 0;
+//			hits[i] = 0;
+//		}
 	}
 }
