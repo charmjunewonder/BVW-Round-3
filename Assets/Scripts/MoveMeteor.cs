@@ -11,7 +11,7 @@ public class MoveMeteor : MonoBehaviour
 		void Start ()
 		{
 				random = new System.Random ();
-				randpos = new Vector3 ((float)random.Next (-21, 21), 1, (float)random.Next (-21, 21));
+				randpos = new Vector3 ((float)random.Next (-28, 28), 1, (float)random.Next (-28, 28));
 	
 		}
 	
@@ -19,15 +19,20 @@ public class MoveMeteor : MonoBehaviour
 		void Update ()
 		{
 				transform.position = Vector3.Lerp (transform.position, randpos, Time.deltaTime * smoother);
-				if (Mathf.Abs ((transform.position.x) - (randpos.x)) < 5) {
+				if (Mathf.Abs ((transform.position.x) - (randpos.x)) < 6) {
 						ChangePos ();
 				}
-				
+				if (Mathf.Abs ((transform.position.z) - (randpos.z)) < 6) {
+						ChangePos ();
+				}
+
+			
+				transform.localScale += new Vector3 (0.0002f, 0, 0.0002f);
 	
 		}
 
 		void ChangePos ()
 		{
-				randpos = new Vector3 ((float)random.Next (-21, 21), 1, (float)random.Next (-21, 21));
+				randpos = new Vector3 ((float)random.Next (-28, 28), 1, (float)random.Next (-28, 28));
 		}
 }
