@@ -5,8 +5,8 @@ public class EnemyCreator : MonoBehaviour
 {
 	public GameObject meteor;
 	public System.Random random;
-	int meteorcount = 1;
-
+	public int meteorcount = 1;
+	int limitedNumer = 50;
 	// Use this for initialization
 	void Start ()
 	{
@@ -20,9 +20,11 @@ public class EnemyCreator : MonoBehaviour
 	IEnumerator createMeteor(){
 		float waitTime = 5;
 		while(true){
-			Debug.Log("Spawn");
-			SpawnMeteor ();
-			waitTime *= 0.9f;
+			if(limitedNumer > meteorcount){
+				Debug.Log("Spawn");
+				SpawnMeteor ();
+				waitTime *= 0.98f;
+			}
 			yield return new WaitForSeconds(waitTime);
 		}
 	}
