@@ -4,26 +4,35 @@ using System.Collections;
 public class BombPower : MonoBehaviour
 {
 		public JamoDrum jod;
-		public GameObject meteor;
 		private bool bombenable;
+		public GameObject spaceship;
+		GameObject[] meteors;
+
 		// Use this for initialization
 		void Start ()
 		{
-	
 		}
 	
 		// Update is called once per frame
 		void Update ()
 		{
-		if (jod.hits [0] > 0 && jod.hits [1] > 0 && jod.hits [2] > 0 && jod.hits [3] > 0 && bombenable == true) {
-						Destroy (meteor);
-						Destroy (gameObject);
+				meteors = GameObject.FindGameObjectsWithTag ("Meteor");
+				if ( bombenable == true) {
+						bombenable = false;
+						Debug.Log ("EXploDe");
+						for (int i=0; i<5; i++) {
+								Destroy (meteors [i].gameObject);
+						}
 				}
 		}
 
-		void OntriggerEnter (Collider other)
+		void OnTriggerEnter (Collider other)
 		{
-				if (other.gameObject.tag == "SpaceShip")
+				Debug.Log ("Acquiring bomb");
+				if (other.gameObject.tag == "Player") {
 						bombenable = true;
+						renderer.enabled = false;
+				}
+						
 		}
 }

@@ -12,7 +12,8 @@ public class JamoDrum : MonoBehaviour
 	public int[] hits = new int[4];
 	
 	private static JamoDrumClient jod = null;
-	
+
+
 	private ETC.Platforms.HitEventHandler hitEvents;
 	private ETC.Platforms.SpinEventHandler spinEvents;
 	

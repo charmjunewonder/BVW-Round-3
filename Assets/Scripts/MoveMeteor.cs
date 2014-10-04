@@ -3,37 +3,30 @@ using System.Collections;
 
 public class MoveMeteor : MonoBehaviour
 {
-		public System.Random random;
-		public float smoother;
-		Vector3 randpos;
+	public Random random;
+	public float smoother;
+	Vector3 randpos;
+	int timer;
 
-		// Use this for initialization
-		void Start ()
-		{
-				random = new System.Random ();
-				randpos = new Vector3 ((float)random.Next (-28, 28), 0.5f, (float)random.Next (-28, 28));
-	
-		}
-	
-		// Update is called once per frame
-		void Update ()
-		{
-				transform.position = Vector3.Lerp (transform.position, randpos, Time.deltaTime * smoother);
-				if (Mathf.Abs ((transform.position.x) - (randpos.x)) < 6) {
-				rigidbody.AddForce(new Vector3(random.Next (-1, 1), 0.5f, random.Next (-1, 1)));
-						ChangePos ();
-				}
-				if (Mathf.Abs ((transform.position.z) - (randpos.z)) < 6) {
-						ChangePos ();
-				}
+	// Use this for initialization
+	void Start ()
+	{
+		random = new Random ();
 
-			
-//				transform.localScale += new Vector3 (0.0002f, 0, 0.0002f);
-	
+		ChangePos ();
+	}
+
+	// Update is called once per frame
+	void Update ()
+	{
+		transform.position = Vector3.Lerp (transform.position, randpos, Time.deltaTime * smoother);
+		if (Vector3.Distance (transform.position, randpos) < 6) {
+			ChangePos ();
 		}
 
-		void ChangePos ()
-		{
-			randpos = new Vector3 ((float)random.Next (-28, 28), 0.5f, (float)random.Next (-28, 28));
-		}
+	}
+	void ChangePos ()
+	{
+		randpos = new Vector3 ((float)Random.Range (-28, 28), 0.5f, (float)Random.Range (-28, 28));
+	}
 }
