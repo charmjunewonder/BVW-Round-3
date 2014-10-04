@@ -7,9 +7,14 @@ public class SpaceShip : MonoBehaviour {
 
 	public GameObject explosion;
 	public GameObject lazer;
+	public Texture[] bladerTexture;
+
 	private float lazerAngle = 45;
 	private bool isLazer;
 	private float angleToRadian = Mathf.PI / 180;
+
+	private bool isBlader;
+	private bool isBladerWorking;
 	// Use this for initialization
 	void Start () {
 
@@ -33,19 +38,34 @@ public class SpaceShip : MonoBehaviour {
 			for(int i = 0; i < hits.Length; ++i){
 				Destroy(hits[i].collider.gameObject);
 			}
+		} else if(isBlader){
+			transform.Rotate(0, jod.spinDelta[3]*10, 0);
+			if(jod.spinDelta[3] > 0){
+				isBladerWorking = true;
+			} else{
+				isBladerWorking = false;
+			}
 		}
 	}
 
 	void OnCollisionEnter(Collision collision) {
 		if (collision.collider.tag == "Meteor") {
 			//explosion.SetActive(true);
-			Debug.Log("Collide! Loss!");
+			if(isBladerWorking){
+				Destroy(collision.collider.gameObject);
+			} else{
+				Debug.Log("Collide! Loss!");
+			}
 		} else if (collision.collider.tag == "RedItem") {
-			Debug.Log("Lazer");
 			isLazer = true;
 			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position, new Vector3(100, 0, -100) - transform.position);
 			lazer.SetActive (true);
 			StartCoroutine(turnOffLazer());
+		} else if (collision.collider.tag == "YellowItem") {
+			isBlader = true;
+			renderer.material.mainTexture = bladerTexture [1];
+			GetComponent<SphereCollider> ().radius = 0.46f;
+			StartCoroutine(turnOffBlader());
 		}
 	}
 
@@ -54,5 +74,13 @@ public class SpaceShip : MonoBehaviour {
 		isLazer = false;
 		lazer.SetActive (false);
 		lazerAngle = 0;
+	}
+
+	IEnumerator turnOffBlader(){
+		yield return new WaitForSeconds(5.0f);
+		isBlader = false;
+		renderer.material.mainTexture = bladerTexture [0];
+		GetComponent<SphereCollider> ().radius = 0.4f;
+		transform.rotation = Quaternion.identity;
 	}
 }
