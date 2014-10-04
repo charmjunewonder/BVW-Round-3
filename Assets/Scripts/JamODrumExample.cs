@@ -54,7 +54,7 @@ public class JamODrumExample : MonoBehaviour {
 			}
 			//hit
 			if(jod.hits[i] > 0) {
-				spaceShip.rigidbody.AddForce(direction[i] * 2, ForceMode.VelocityChange);
+				spaceShip.rigidbody.AddForce(direction[i] * 10, ForceMode.VelocityChange);
 			}
 		}
 		
