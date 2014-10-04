@@ -12,17 +12,26 @@ public class MoveMeteor : MonoBehaviour
 	void Start ()
 	{
 		random = new Random ();
-
 		ChangePos ();
+		rigidbody.velocity = randpos;
+		//(randpos * 10, ForceMode.Force);
+		//StartCoroutine (addForce ());
+	}
+
+	IEnumerator addForce(){
+		while(true){
+			rigidbody.AddForce (randpos * 10, ForceMode.Force);
+			yield return new WaitForSeconds(3.0f);
+		}
 	}
 
 	// Update is called once per frame
 	void Update ()
 	{
-		transform.position = Vector3.Lerp (transform.position, randpos, Time.deltaTime * smoother);
-		if (Vector3.Distance (transform.position, randpos) < 6) {
-			ChangePos ();
-		}
+//		transform.position = Vector3.Lerp (transform.position, randpos, Time.deltaTime * smoother);
+//		if (Vector3.Distance (transform.position, randpos) < 6) {
+//			ChangePos ();
+//		}
 
 	}
 	void ChangePos ()

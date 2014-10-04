@@ -116,7 +116,7 @@ public class SpaceShip : MonoBehaviour {
 			isBomb = true;
 		} else if (collision.collider.tag == "GreenItem") {
 			isShield = true;
-			//StartCoroutine(turnOffBlader());
+			StartCoroutine(turnOffShield());
 
 		}
 	}
