@@ -7,24 +7,23 @@ public class MoveMeteor : MonoBehaviour
 	public float smoother;
 	Vector3 randpos;
 	int timer;
-
+	public int FORCE_MULTIPLIER = 15;
 	// Use this for initialization
 	void Start ()
 	{
 		random = new Random ();
 		ChangePos ();
-		rigidbody.velocity = randpos;
-		//(randpos * 10, ForceMode.Force);
+		rigidbody.AddForce(new Vector3 (Random.Range (-10, 10), 0, Random.Range (-10, 10))*FORCE_MULTIPLIER, ForceMode.Force);
 		//StartCoroutine (addForce ());
 	}
 
+	
 	IEnumerator addForce(){
 		while(true){
 			rigidbody.AddForce (randpos * 10, ForceMode.Force);
-			yield return new WaitForSeconds(3.0f);
+			yield return new WaitForSeconds(10.0f);
 		}
 	}
-
 	// Update is called once per frame
 	void Update ()
 	{

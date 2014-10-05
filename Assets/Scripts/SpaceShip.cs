@@ -72,7 +72,6 @@ public class SpaceShip : MonoBehaviour {
 			isBomb = false;
 			StartCoroutine(destroyExplosion(explosionClone));
 		}
-		Debug.Log ("shield " + isShield); 
 		if(isShield){
 			shield.SetActive(true);
 			shield.transform.position = transform.position;
@@ -89,6 +88,11 @@ public class SpaceShip : MonoBehaviour {
 			}
 		}
 	}
+
+	IEnumerator restartGame(){
+		yield return new WaitForSeconds (2.0f);
+		Application.LoadLevel ("GamePlay");
+	}
 	
 	void OnCollisionEnter(Collision collision) {
 		if (collision.collider.tag == "Meteor") {
@@ -99,24 +103,34 @@ public class SpaceShip : MonoBehaviour {
 
 			} else{
 				Debug.Log("Collide! Loss!");
-				//explosion.SetActive(true);
-
+				rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+				GameObject explosionClone = Instantiate(explosion) as GameObject;
+				explosionClone.SetActive(true);
+				explosionClone.transform.parent = transform;
+				explosionClone.transform.position = transform.position;
+				StartCoroutine(restartGame());
 			}
 		} else if (collision.collider.tag == "RedItem") {
 			isLazer = true;
 			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position, new Vector3(100, 0, -100) - transform.position);
 			lazer.SetActive (true);
 			StartCoroutine(turnOffLazer());
+			collision.gameObject.SetActive(false);
 		} else if (collision.collider.tag == "YellowItem") {
 			isBlader = true;
 			renderer.material.mainTexture = bladerTexture [1];
 			GetComponent<SphereCollider> ().radius = 0.46f;
 			StartCoroutine(turnOffBlader());
+			collision.gameObject.SetActive(false);
+
 		} else if (collision.collider.tag == "BlueItem") {
 			isBomb = true;
+			collision.gameObject.SetActive(false);
+
 		} else if (collision.collider.tag == "GreenItem") {
 			isShield = true;
 			StartCoroutine(turnOffShield());
+			collision.gameObject.SetActive(false);
 
 		}
 	}
