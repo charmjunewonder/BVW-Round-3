@@ -5,7 +5,6 @@ public class JamODrumExample : MonoBehaviour {
 	
 	public JamoDrum jod;
 	public static float timeScore;
-	public static float highScore;
 	public GameObject[] spinners = new GameObject[4];
 	public GameObject[] drums = new GameObject[4];
 

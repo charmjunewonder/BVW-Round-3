@@ -18,7 +18,7 @@ public class EnemyCreator : MonoBehaviour
 	}
 
 	IEnumerator createMeteorOutside(){
-		float waitTime = 0.2f;
+		float waitTime = 1f;
 		while(true){
 			SpawnMeteorOutside1 ();
 			SpawnMeteorOutside2 ();

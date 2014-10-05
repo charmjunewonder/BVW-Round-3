@@ -11,9 +11,8 @@ public class RestartNotify : MonoBehaviour
 		char[] minutes = Mathf.Floor ((JamODrumExample.timeScore) / 60).ToString ().ToCharArray ();
 		char[] seconds = Mathf.RoundToInt ((JamODrumExample.timeScore) % 60).ToString ().ToCharArray ();
 
-		char[] hminutes = Mathf.Floor ((JamODrumExample.highScore) / 60).ToString ().ToCharArray ();
-		char[] hseconds = Mathf.RoundToInt ((JamODrumExample.highScore) % 60).ToString ().ToCharArray ();
 	
+
 		// Use this for initialization
 		void Start ()
 		{
@@ -21,15 +20,27 @@ public class RestartNotify : MonoBehaviour
 				currentScore [1].renderer.material.mainTexture = numbersTexture [0];
 				currentScore [2].renderer.material.mainTexture = numbersTexture [0];
 				currentScore [3].renderer.material.mainTexture = numbersTexture [0];
-				JamODrumExample.highScore = JamODrumExample.timeScore;
+
+				highestScore [0].renderer.material.mainTexture = numbersTexture [0];
+				highestScore [1].renderer.material.mainTexture = numbersTexture [0];
+				highestScore [2].renderer.material.mainTexture = numbersTexture [0];
+				highestScore [3].renderer.material.mainTexture = numbersTexture [0];
+		
 		}
 
 		void Update ()
 		{
-				if (JamODrumExample.timeScore > JamODrumExample.highScore)
-						JamODrumExample.highScore = JamODrumExample.timeScore;
+				if (JamODrumExample.timeScore > PlayerPrefs.GetFloat ("HS"))
+						PlayerPrefs.SetFloat ("HS", JamODrumExample.timeScore);
+
+				Debug.Log (PlayerPrefs.GetInt ("HS"));
 				
 				Debug.Log (JamODrumExample.timeScore);
+
+		
+				float highScore = PlayerPrefs.GetFloat ("HS");
+				char[] hminutes = Mathf.Floor ((highScore) / 60).ToString ().ToCharArray ();
+				char[] hseconds = Mathf.RoundToInt ((highScore) % 60).ToString ().ToCharArray ();
 
 				if (JamODrumExample.timeScore < 10) 
 						currentScore [3].renderer.enabled = false;
@@ -145,13 +156,13 @@ public class RestartNotify : MonoBehaviour
 				}
 
 
-				if (JamODrumExample.highScore < 10) 
+				if (PlayerPrefs.GetFloat ("HS") < 10) 
 						highestScore [3].renderer.enabled = false;
 				else
 						highestScore [3].renderer.enabled = true;
 		
 		
-				if (JamODrumExample.highScore < 600) 
+				if (PlayerPrefs.GetFloat ("HS") < 600) 
 						highestScore [1].renderer.enabled = false;
 				else
 						highestScore [1].renderer.enabled = true;
