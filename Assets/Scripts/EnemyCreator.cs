@@ -34,6 +34,7 @@ public class EnemyCreator : MonoBehaviour
 	void SpawnMeteor ()
 	{
 		GameObject g = Instantiate (meteor, (new Vector3 ((float)random.Next (-21, 21), 1, (float)random.Next (-21, 21))), Quaternion.identity) as GameObject;
+		g.SetActive (true);
 		g.transform.parent = transform;
 		g.rigidbody.AddForce (new Vector3 (random.Next (-1, 1), 0, random.Next (-1, 1)));
 		meteorcount += 1;
