@@ -13,7 +13,7 @@ public class MoveMeteor : MonoBehaviour
 	{
 		random = new Random ();
 		ChangePos ();
-		rigidbody.AddForce(new Vector3 (Random.Range (-10, 10), 0, Random.Range (-10, 10))*FORCE_MULTIPLIER, ForceMode.Force);
+//		rigidbody.AddForce(new Vector3 (Random.Range (-10, 10), 0, Random.Range (-10, 10))*FORCE_MULTIPLIER, ForceMode.Force);
 		//StartCoroutine (addForce ());
 	}
 

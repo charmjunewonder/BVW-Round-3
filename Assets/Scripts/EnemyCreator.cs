@@ -7,30 +7,26 @@ public class EnemyCreator : MonoBehaviour
 	public System.Random random;
 	public int meteorcount = 1;
 	int limitedNumer = 50;
+	public ObjectPool objectPool;
+
 	// Use this for initialization
 	void Start ()
 	{
 		random = new System.Random ();
-		for(int i = 0; i < 5; ++i){
-			SpawnMeteor ();
-		}
-		StartCoroutine (createMeteor ());
+
+		StartCoroutine (createMeteorOutside ());
 	}
-	
-	IEnumerator createMeteor(){
-		float waitTime = 5;
+
+	IEnumerator createMeteorOutside(){
+		float waitTime = 0.2f;
 		while(true){
-			if(limitedNumer > meteorcount){
-				Debug.Log("Spawn");
-				SpawnMeteor ();
-				if(waitTime > 0.5f)
-					waitTime *= 0.95f;
-			}
+			SpawnMeteorOutside1 ();
+			SpawnMeteorOutside2 ();
+			SpawnMeteorOutside3 ();
+			SpawnMeteorOutside4 ();
 			yield return new WaitForSeconds(waitTime);
 		}
 	}
-
-
 
 	void SpawnMeteor ()
 	{
@@ -41,10 +37,43 @@ public class EnemyCreator : MonoBehaviour
 		meteorcount += 1;
 	}
 
-	void SpawnMeteorOutside ()
+	void SpawnMeteorOutside1 ()
 	{
-		GameObject g = Instantiate (meteor, (new Vector3 (60, 0, 0)), Quaternion.identity) as GameObject;
-		g.transform.parent = transform;
+		GameObject g = objectPool.GetObjectFromPool();
+		g.transform.position = new Vector3 (60, 0, Random.Range(-35, 35));
+		g.GetComponent<Meteor> ().firstTime = true;
+		g.SetActive (true);
+		g.rigidbody.velocity = new Vector3 (-30, 0, Random.Range(-20, 20));
+		meteorcount += 1;
+	}
+
+	void SpawnMeteorOutside2 ()
+	{
+		GameObject g = objectPool.GetObjectFromPool();
+		g.transform.position = new Vector3 (-60, 0, Random.Range(-35, 35));
+		g.GetComponent<Meteor> ().firstTime = true;
+		g.SetActive (true);
+		g.rigidbody.velocity = new Vector3 (30, 0, Random.Range(-20, 20));
+		meteorcount += 1;
+	}
+
+	void SpawnMeteorOutside3 ()
+	{
+		GameObject g = objectPool.GetObjectFromPool();
+		g.transform.position = new Vector3 (Random.Range(-35, 35), 0, 60);
+		g.GetComponent<Meteor> ().firstTime = true;
+		g.SetActive (true);
+		g.rigidbody.velocity = new Vector3 (Random.Range(-20, 20), 0, -30);
+		meteorcount += 1;
+	}
+
+	void SpawnMeteorOutside4 ()
+	{
+		GameObject g = objectPool.GetObjectFromPool();
+		g.transform.position = new Vector3 (Random.Range(-35, 35), 0, -60);
+		g.GetComponent<Meteor> ().firstTime = true;
+		g.SetActive (true);
+		g.rigidbody.velocity = new Vector3 (Random.Range(-20, 20), 0, 30);
 		meteorcount += 1;
 	}
 }
