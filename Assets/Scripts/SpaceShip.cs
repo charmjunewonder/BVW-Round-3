@@ -6,23 +6,25 @@ public class SpaceShip : MonoBehaviour {
 	public JamoDrum jod;
 
 	public GameObject explosion;
-	public GameObject lazer;
-	public Texture[] bladerTexture;
 
 	public EnemyCreator enemyCreator;
+
+	public GameObject lazer;
+	public ColorItem laserItem;
 	private float lazerAngle = 45;
 	private bool isLazer = false;
 	private float angleToRadian = Mathf.PI / 180;
 
+	public ColorItem bladeItem;
+	public GameObject blade;
 	private bool isBlader = false;
-	private bool isBladerWorking = false;
+	public bool isBladerWorking = false;
 
+	public GameObject bombExplosion;
 	private bool isBomb = false;
 
-	private bool isShield = false;
-	private bool isShieldWorking = false;
 	public GameObject shield;
-	public GameObject honeyShield;
+	private bool isShield = false;
 	// Use this for initialization
 	void Start () {
 
@@ -31,7 +33,7 @@ public class SpaceShip : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(isLazer){
-			lazerAngle += jod.spinDelta[0]/2;
+			lazerAngle += jod.spinDelta[laserItem.colorChoice]/2;
 			//lazerAngle = Mathf.Repeat(lazerAngle, 360);
 			Vector3 direction = new Vector3(100* Mathf.Cos(lazerAngle*angleToRadian), 0, -100* Mathf.Sin(lazerAngle*angleToRadian));
 			Vector3 targetPosition = direction + transform.position;
@@ -48,8 +50,10 @@ public class SpaceShip : MonoBehaviour {
 		} 
 
 		if(isBlader){
-			transform.Rotate(0, jod.spinDelta[3]*10, 0);
-			if(jod.spinDelta[3] > 0){
+			blade.transform.Rotate(0, jod.spinDelta[bladeItem.colorChoice]*10, 0);
+			blade.transform.position = transform.position;
+
+			if(Mathf.Abs(jod.spinDelta[bladeItem.colorChoice]) > 0){
 				isBladerWorking = true;
 			} else{
 				isBladerWorking = false;
@@ -57,8 +61,7 @@ public class SpaceShip : MonoBehaviour {
 		} 
 
 		if(isBomb && Mathf.Abs(jod.spinDelta[1]) > 0){
-			Debug.Log("sdjflak");
-			GameObject explosionClone = Instantiate(explosion) as GameObject;
+			GameObject explosionClone = Instantiate(bombExplosion) as GameObject;
 			explosionClone.SetActive(true);
 			explosionClone.transform.parent = transform;
 			explosionClone.transform.position = transform.position;
@@ -75,17 +78,7 @@ public class SpaceShip : MonoBehaviour {
 		if(isShield){
 			shield.SetActive(true);
 			shield.transform.position = transform.position;
-			honeyShield.transform.position = transform.position;
 
-			if(Mathf.Abs(jod.spinDelta[2]) > 0){
-				isShieldWorking = true;
-				honeyShield.SetActive(true);
-
-			} else{
-				isShieldWorking = false;
-				honeyShield.SetActive(false);
-
-			}
 		}
 	}
 
@@ -96,21 +89,48 @@ public class SpaceShip : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision collision) {
 		if (collision.collider.tag == "Meteor") {
+			Debug.Log("Collide! Loss!");
+			rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+			GameObject explosionClone = Instantiate(explosion) as GameObject;
+			explosionClone.SetActive(true);
+			explosionClone.transform.parent = transform;
+			explosionClone.transform.position = transform.position;
+			StartCoroutine(restartGame());
+		} else if (collision.collider.tag == "LaserItem") {
+			isLazer = true;
+			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position, new Vector3(100, 0, -100) - transform.position);
+			lazer.SetActive (true);
+			StartCoroutine(turnOffLazer());
+			collision.gameObject.SetActive(false);
+		} else if (collision.collider.tag == "BladeItem") {
+			isBlader = true;
+			GetComponent<SphereCollider> ().radius = 0.58f;
+			StartCoroutine(turnOffBlader());
+			collision.gameObject.SetActive(false);
+			GetComponent<SphereCollider>().enabled = false;
+			blade.SetActive(true);
+		} else if (collision.collider.tag == "ShieldItem") {
+			isShield = true;
+			StartCoroutine(turnOffShield());
+			shield.SetActive(true);
+			GetComponent<SphereCollider>().enabled = false;
+			collision.gameObject.SetActive(false);
 
-			if(isBladerWorking){
-				Destroy(collision.collider.gameObject);
-				enemyCreator.meteorcount--;
-
-			} else{
-				Debug.Log("Collide! Loss!");
-				rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-				GameObject explosionClone = Instantiate(explosion) as GameObject;
-				explosionClone.SetActive(true);
-				explosionClone.transform.parent = transform;
-				explosionClone.transform.position = transform.position;
-				StartCoroutine(restartGame());
+		} else if (collision.collider.tag == "BombItem") {
+			collision.gameObject.SetActive(false);
+			GameObject explosionClone = Instantiate(bombExplosion) as GameObject;
+			explosionClone.SetActive(true);
+			explosionClone.transform.parent = transform;
+			explosionClone.transform.position = transform.position;
+			GameObject[] meteors = GameObject.FindGameObjectsWithTag ("Meteor");
+			for (int i=0; i<meteors.Length; i++) {
+				if(Vector3.Distance(meteors[i].transform.position, transform.position) < 5){
+					Destroy (meteors [i].gameObject);
+					enemyCreator.meteorcount--;
+				}
 			}
-		} else if (collision.collider.tag == "RedItem") {
+			StartCoroutine(destroyExplosion(explosionClone));
+		} /*else if (collision.collider.tag == "RedItem") {
 			isLazer = true;
 			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position, new Vector3(100, 0, -100) - transform.position);
 			lazer.SetActive (true);
@@ -119,7 +139,7 @@ public class SpaceShip : MonoBehaviour {
 		} else if (collision.collider.tag == "YellowItem") {
 			isBlader = true;
 			renderer.material.mainTexture = bladerTexture [1];
-			GetComponent<SphereCollider> ().radius = 0.46f;
+			GetComponent<SphereCollider> ().radius = 0.58f;
 			StartCoroutine(turnOffBlader());
 			collision.gameObject.SetActive(false);
 
@@ -132,7 +152,8 @@ public class SpaceShip : MonoBehaviour {
 			StartCoroutine(turnOffShield());
 			collision.gameObject.SetActive(false);
 
-		}
+		}*/
+
 	}
 
 	IEnumerator turnOffLazer(){
@@ -146,15 +167,16 @@ public class SpaceShip : MonoBehaviour {
 	IEnumerator turnOffShield(){
 		yield return new WaitForSeconds(5.0f);
 		isShield = false;
-		isShieldWorking = false;
-		honeyShield.SetActive (false);
 		shield.SetActive (false);
+		GetComponent<SphereCollider>().enabled = true;
 	}
-
+	
 	IEnumerator turnOffBlader(){
 		yield return new WaitForSeconds(5.0f);
 		isBlader = false;
-		renderer.material.mainTexture = bladerTexture [0];
+		blade.SetActive (false);
+		GetComponent<SphereCollider>().enabled = true;
+
 		GetComponent<SphereCollider> ().radius = 0.4f;
 		transform.rotation = Quaternion.identity;
 	}

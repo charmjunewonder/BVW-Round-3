@@ -23,7 +23,8 @@ public class EnemyCreator : MonoBehaviour
 			if(limitedNumer > meteorcount){
 				Debug.Log("Spawn");
 				SpawnMeteor ();
-				waitTime *= 0.95f;
+				if(waitTime > 0.5f)
+					waitTime *= 0.95f;
 			}
 			yield return new WaitForSeconds(waitTime);
 		}
