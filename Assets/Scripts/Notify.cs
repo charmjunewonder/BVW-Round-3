@@ -14,7 +14,7 @@ public class Notify : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (StartGame.begin && !isStart) {
+		if ((StartGame.begin || EndGame.begin) && !isStart) {
 			renderer.enabled = true;
 			StartCoroutine (NotifyPlayer ());
 			isStart = true;

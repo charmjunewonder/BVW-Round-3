@@ -12,7 +12,7 @@ public class Blade : MonoBehaviour {
 	void OnCollisionEnter(Collision collision) {
 		if (collision.collider.tag == "Meteor") {
 			if(spaceShip.isBladerWorking){
-				Destroy(collision.collider.gameObject);
+				collision.collider.gameObject.SetActive(false);
 				enemyCreator.meteorcount--;
 			} 
 		} 

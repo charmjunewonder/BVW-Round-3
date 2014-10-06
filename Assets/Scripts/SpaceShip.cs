@@ -25,6 +25,8 @@ public class SpaceShip : MonoBehaviour {
 
 	public GameObject shield;
 	private bool isShield = false;
+
+	public TimeRecorder timeRecorder;
 	// Use this for initialization
 	void Start () {
 
@@ -44,7 +46,7 @@ public class SpaceShip : MonoBehaviour {
 			hits = Physics.RaycastAll(transform.position, direction, 100.0F, meteorLayer);
 
 			for(int i = 0; i < hits.Length; ++i){
-				Destroy(hits[i].collider.gameObject);
+				hits[i].collider.gameObject.SetActive(false);
 				enemyCreator.meteorcount--;
 			}
 		} 
@@ -68,7 +70,7 @@ public class SpaceShip : MonoBehaviour {
 			GameObject[] meteors = GameObject.FindGameObjectsWithTag ("Meteor");
 			for (int i=0; i<meteors.Length; i++) {
 				if(Vector3.Distance(meteors[i].transform.position, transform.position) < 5){
-					Destroy (meteors [i].gameObject);
+					meteors [i].gameObject.SetActive(false);
 					enemyCreator.meteorcount--;
 				}
 			}
@@ -84,7 +86,8 @@ public class SpaceShip : MonoBehaviour {
 
 	IEnumerator restartGame(){
 		yield return new WaitForSeconds (2.0f);
-		Application.LoadLevel ("GamePlay");
+		PlayerPrefs.SetInt ("CS", timeRecorder.gameTime);
+		Application.LoadLevel ("End");
 	}
 	
 	void OnCollisionEnter(Collision collision) {
@@ -125,7 +128,7 @@ public class SpaceShip : MonoBehaviour {
 			GameObject[] meteors = GameObject.FindGameObjectsWithTag ("Meteor");
 			for (int i=0; i<meteors.Length; i++) {
 				if(Vector3.Distance(meteors[i].transform.position, transform.position) < 5){
-					Destroy (meteors [i].gameObject);
+					meteors [i].gameObject.SetActive(false);
 					enemyCreator.meteorcount--;
 				}
 			}
