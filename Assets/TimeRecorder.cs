@@ -26,7 +26,7 @@ public class TimeRecorder : MonoBehaviour {
 	IEnumerator recordTime(){
 		while(true){
 			gameTime = (int)Time.time - startTime;
-			Debug.Log(gameTime);
+//			Debug.Log(gameTime);
 			int minutes = gameTime / 60;
 			int seconds = gameTime - minutes * 60;
 			int second1 = seconds / 10;

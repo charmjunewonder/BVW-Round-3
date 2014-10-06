@@ -63,7 +63,6 @@ public class EndGame : MonoBehaviour
 		if ((colorNotify[0].activeSelf) && (colorNotify[1].activeSelf) && (colorNotify[2].activeSelf) && (colorNotify[3].activeSelf)) {
 			fourColorNotify.SetActive(false);
 
-			notify.SetActive(true);
 			StartCoroutine(restartGame());
 
 		}
@@ -81,6 +80,8 @@ public class EndGame : MonoBehaviour
 	IEnumerator restartGame(){
 		yield return new WaitForSeconds (0.5f);
 		notify.renderer.material.mainTexture = startTexture;
+		notify.SetActive(true);
+
 		yield return new WaitForSeconds (0.5f);
 
 		Application.LoadLevel ("GamePlay");

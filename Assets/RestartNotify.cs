@@ -29,8 +29,10 @@ public class RestartNotify : MonoBehaviour
 	void showTime(){
 		int currentTime = PlayerPrefs.GetInt ("CS");
 		int highestTime = PlayerPrefs.GetInt ("HS");
-		if (currentTime > highestTime)
+		if (currentTime > highestTime){
 			PlayerPrefs.SetInt ("HS", currentTime);
+			highestTime = currentTime;
+		}
 		
 		Debug.Log (PlayerPrefs.GetInt ("HS"));
 		Debug.Log (PlayerPrefs.GetInt ("CS"));
