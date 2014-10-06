@@ -15,6 +15,8 @@ public class SpecialItemCreator : MonoBehaviour {
 
 	IEnumerator createSpecialItem(){
 		while(true){
+			//yield return new WaitForSeconds(10.0f);
+
 			for(int i = 0; i < specialItems.Length; ++i){
 				if(!specialItems[i].activeSelf){
 					if(i < 2){

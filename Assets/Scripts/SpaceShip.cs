@@ -40,14 +40,16 @@ public class SpaceShip : MonoBehaviour {
 	void Update () {
 		if(isLazer){
 			lazerAngle += jod.spinDelta[laserItem.colorChoice]/2;
+			float angle = lazerAngle*angleToRadian / 2;
 			//lazerAngle = Mathf.Repeat(lazerAngle, 360);
-			Vector3 direction = new Vector3(100* Mathf.Cos(lazerAngle*angleToRadian), 0, -100* Mathf.Sin(lazerAngle*angleToRadian));
+			Vector3 direction = new Vector3(100* Mathf.Cos(angle), 0, -100* Mathf.Sin(angle));
 			Vector3 targetPosition = direction + transform.position;
-			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position, targetPosition);
+			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position + direction.normalized * 2, targetPosition);
 
 			RaycastHit[] hits;
 			int meteorLayer = 1 << 8;
 			hits = Physics.RaycastAll(transform.position, direction, 100.0F, meteorLayer);
+			Debug.Log(hits.Length);
 
 			for(int i = 0; i < hits.Length; ++i){
 				hits[i].collider.gameObject.SetActive(false);
@@ -70,7 +72,7 @@ public class SpaceShip : MonoBehaviour {
 			}
 		} 
 
-		if(isBomb && Mathf.Abs(jod.spinDelta[1]) > 0){
+		/*if(isBomb && Mathf.Abs(jod.spinDelta[1]) > 0){
 			GameObject explosionClone = Instantiate(bombExplosion) as GameObject;
 			explosionClone.SetActive(true);
 			explosionClone.transform.parent = transform;
@@ -84,7 +86,7 @@ public class SpaceShip : MonoBehaviour {
 			}
 			isBomb = false;
 			StartCoroutine(destroyExplosion(explosionClone));
-		}
+		}*/
 		if(isShield){
 			shield.SetActive(true);
 			shield.transform.position = transform.position;
@@ -142,13 +144,9 @@ public class SpaceShip : MonoBehaviour {
 			explosionClone.SetActive(true);
 			explosionClone.transform.parent = transform;
 			explosionClone.transform.position = transform.position;
-			GameObject[] meteors = GameObject.FindGameObjectsWithTag ("Meteor");
-			for (int i=0; i<meteors.Length; i++) {
-				if(Vector3.Distance(meteors[i].transform.position, transform.position) < 5){
-					meteors [i].gameObject.SetActive(false);
-					enemyCreator.meteorcount--;
-				}
-			}
+			audio.clip = audios[4];
+			audio.Play ();
+			StartCoroutine(killWithBomb());
 			StartCoroutine(destroyExplosion(explosionClone));
 		} /*else if (collision.collider.tag == "RedItem") {
 			isLazer = true;
@@ -186,16 +184,28 @@ public class SpaceShip : MonoBehaviour {
 		audio.Stop();
 	}
 
+	IEnumerator killWithBomb(){
+		for(int n = 0; n < 3; ++n){
+			GameObject[] meteors = GameObject.FindGameObjectsWithTag ("Meteor");
+			for (int i=0; i<meteors.Length; i++) {
+				if(Vector3.Distance(meteors[i].transform.position, transform.position) < 13){
+					meteors [i].gameObject.SetActive(false);
+					enemyCreator.meteorcount--;
+				}
+			}
+			yield return new WaitForSeconds(0.1f);
+		}
+	}
 	
 	IEnumerator turnOffShield(){
-		yield return new WaitForSeconds(5.0f);
+		yield return new WaitForSeconds(3.0f);
 		isShield = false;
 		shield.SetActive (false);
 		GetComponent<SphereCollider>().enabled = true;
 	}
 	
 	IEnumerator turnOffBlader(){
-		yield return new WaitForSeconds(5.0f);
+		yield return new WaitForSeconds(6.0f);
 		isBlader = false;
 		blade.SetActive (false);
 		GetComponent<SphereCollider>().enabled = true;
