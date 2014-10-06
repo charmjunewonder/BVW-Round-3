@@ -9,7 +9,7 @@ public class EnemyCreator : MonoBehaviour
 	int limitedNumer = 50;
 	public ObjectPool objectPool;
 	private float speed = 10;
-	private float waitingTime = 2f;
+	private float waitingTime = 1f;
 	// Use this for initialization
 	void Start ()
 	{
@@ -22,11 +22,11 @@ public class EnemyCreator : MonoBehaviour
 
 	IEnumerator increaseDifficulty(){
 		while(true){
-			yield return new WaitForSeconds(10.0f);
+			yield return new WaitForSeconds(12.0f);
 
 			Debug.Log("more difficult");
 			if(waitingTime > 0.3f)
-				waitingTime -=0.2f;
+				waitingTime -=0.15f;
 			if(speed < 20f)
 				speed += 0.5f;
 		}
