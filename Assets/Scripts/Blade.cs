@@ -9,12 +9,16 @@ public class Blade : MonoBehaviour {
 	
 	}
 	
-	void OnCollisionEnter(Collision collision) {
-		if (collision.collider.tag == "Meteor") {
-			if(spaceShip.isBladerWorking){
-				collision.collider.gameObject.SetActive(false);
-				enemyCreator.meteorcount--;
-			} 
-		} 
-	}
+//	void OnCollisionEnter(Collision collision) {
+//		if (collision.collider.tag == "Meteor") {
+//			Debug.Log("sdjfl");
+//			if(spaceShip.isBladerWorking){
+//				collision.collider.gameObject.SetActive(false);
+//				enemyCreator.meteorcount--;
+//			} 
+//		} else if(collision.collider.tag == "Bound"){
+//			Debug.Log("sjkdfhjksdafjksdha");
+//
+//		}
+//	}
 }

@@ -10,6 +10,7 @@ public class SpaceShip : MonoBehaviour {
 	public EnemyCreator enemyCreator;
 
 	public GameObject lazer;
+	public GameObject lazerTrail;
 	public ColorItem laserItem;
 	private float lazerAngle = 45;
 	private bool isLazer = false;
@@ -31,6 +32,8 @@ public class SpaceShip : MonoBehaviour {
 	public GameObject[] spinnerPower;
 
 	public AudioClip[] audios;
+	public int colorChoice;
+
 	// Use this for initialization
 	void Start () {
 
@@ -39,7 +42,7 @@ public class SpaceShip : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(isLazer){
-			lazerAngle += jod.spinDelta[laserItem.colorChoice]/2;
+			lazerAngle += jod.spinDelta[colorChoice]/2;
 			float angle = lazerAngle*angleToRadian / 2;
 			//lazerAngle = Mathf.Repeat(lazerAngle, 360);
 			Vector3 direction = new Vector3(100* Mathf.Cos(angle), 0, -100* Mathf.Sin(angle));
@@ -58,10 +61,10 @@ public class SpaceShip : MonoBehaviour {
 		} 
 
 		if(isBlader){
-			blade.transform.Rotate(0, jod.spinDelta[bladeItem.colorChoice]*10, 0);
+			blade.transform.Rotate(0, jod.spinDelta[colorChoice]*10, 0);
 			blade.transform.position = transform.position + new Vector3(0, 0.1f, 0);
 
-			if(Mathf.Abs(jod.spinDelta[bladeItem.colorChoice]) > 0){
+			if(Mathf.Abs(jod.spinDelta[colorChoice]) > 0){
 				isBladerWorking = true;
 				audio.clip = audios[2];
 				audio.loop = true;
@@ -102,21 +105,33 @@ public class SpaceShip : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision collision) {
 		if (collision.collider.tag == "Meteor") {
-			Debug.Log("Collide! Loss!");
-			audio.clip = audios[0];
-			if(!audio.isPlaying)
-				audio.Play();
-			rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-			GameObject explosionClone = Instantiate(explosion) as GameObject;
-			explosionClone.SetActive(true);
-			explosionClone.transform.parent = transform;
-			explosionClone.transform.position = transform.position;
-			StartCoroutine(restartGame());
+			if(isBlader){
+				if(isBladerWorking){
+					collision.collider.gameObject.SetActive(false);
+					enemyCreator.meteorcount--;
+				}
+			} else{
+				Debug.Log("Collide! Loss!");
+				audio.clip = audios[0];
+				if(!audio.isPlaying)
+					audio.Play();
+				rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+				GameObject explosionClone = Instantiate(explosion) as GameObject;
+				explosionClone.SetActive(true);
+				explosionClone.transform.parent = transform;
+				explosionClone.transform.position = transform.position;
+				StartCoroutine(restartGame());
+			}
 		} else if (collision.collider.tag == "LaserItem") {
 			isLazer = true;
+			colorChoice = laserItem.colorChoice;
 			audio.clip = audios[1];
 			audio.loop = true;
 			audio.Play();
+
+//			renderer.material.mainTexture = colorTextures [colorChoice];
+//			attack.renderer.material.mainTexture = colorAttackTextures [colorChoice];
+
 			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position, new Vector3(100, 0, -100) - transform.position);
 			lazer.SetActive (true);
 			spinnerPower[laserItem.colorChoice].SetActive(true);
@@ -124,10 +139,11 @@ public class SpaceShip : MonoBehaviour {
 			collision.gameObject.SetActive(false);
 		} else if (collision.collider.tag == "BladeItem") {
 			isBlader = true;
-			GetComponent<SphereCollider> ().radius = 0.58f;
+			colorChoice = bladeItem.colorChoice;
 			StartCoroutine(turnOffBlader());
 			collision.gameObject.SetActive(false);
-			GetComponent<SphereCollider>().enabled = false;
+			//GetComponent<SphereCollider>().enabled = false;
+			GetComponent<SphereCollider> ().radius = 0.44f;
 			blade.SetActive(true);
 			spinnerPower[bladeItem.colorChoice].SetActive(true);
 
@@ -175,7 +191,7 @@ public class SpaceShip : MonoBehaviour {
 	}
 
 	IEnumerator turnOffLazer(){
-		yield return new WaitForSeconds(3.0f);
+		yield return new WaitForSeconds(5.0f);
 		isLazer = false;
 		lazer.SetActive (false);
 		lazerAngle = 0;
@@ -211,7 +227,7 @@ public class SpaceShip : MonoBehaviour {
 		GetComponent<SphereCollider>().enabled = true;
 		audio.loop = false;
 		audio.Stop();
-		GetComponent<SphereCollider> ().radius = 0.4f;
+		GetComponent<SphereCollider> ().radius = 0.35f;
 		transform.rotation = Quaternion.identity;
 		spinnerPower[bladeItem.colorChoice].SetActive(false);
 
