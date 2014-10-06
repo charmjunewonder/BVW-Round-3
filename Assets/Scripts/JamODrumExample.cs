@@ -19,6 +19,7 @@ public class JamODrumExample : MonoBehaviour {
 	
 	private bool once;
 	private Vector3[] direction;
+	public GameObject[] spinnerPull;
 	// Use this for initialization
 	void Start () {
 		direction = new Vector3[4];
@@ -56,8 +57,10 @@ public class JamODrumExample : MonoBehaviour {
 			if(jod.hits[i] > 0) {
 				spaceShip.rigidbody.AddForce(direction[i] * 10, ForceMode.VelocityChange);
 				drums[i].renderer.material.mainTexture = hittedDrumTexture[i];
+				spinnerPull[i].SetActive(true);
 			} else{
 				drums[i].renderer.material.mainTexture = normalDrumTexture[i];
+				spinnerPull[i].SetActive(false);
 
 			}
 		}

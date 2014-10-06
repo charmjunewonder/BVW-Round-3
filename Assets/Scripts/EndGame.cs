@@ -5,7 +5,7 @@ public class EndGame : MonoBehaviour
 {
 	
 	public JamoDrum jod;
-
+	public Texture startTexture;
 	public GameObject[] spinners = new GameObject[4];
 	public GameObject[] drums = new GameObject[4];
 	public GameObject[] colorNotify;
@@ -21,7 +21,6 @@ public class EndGame : MonoBehaviour
 	private float[] initAngle = new float[4];
 
 	private bool once;
-
 	public static bool begin;
 	// Use this for initialization
 	void Start ()
@@ -56,18 +55,17 @@ public class EndGame : MonoBehaviour
 			if (jod.hits [i] > 0) {
 				drums [i].renderer.material.mainTexture = hittedDrumTexture [i];
 				colorNotify[i].SetActive(true);
-			} else {
-				drums [i].renderer.material.mainTexture = normalDrumTexture [i];
-
-			}
+				audio.Play();
+			} 
 		}
 
 
-		if ((jod.hits [0] > 0) && (jod.hits [1] > 0) && (jod.hits [2] > 0) && (jod.hits [3] > 0)) {
-			begin = true;
+		if ((colorNotify[0].activeSelf) && (colorNotify[1].activeSelf) && (colorNotify[2].activeSelf) && (colorNotify[3].activeSelf)) {
 			fourColorNotify.SetActive(false);
 
 			notify.SetActive(true);
+			StartCoroutine(restartGame());
+
 		}
 
 		if (Input.GetKeyUp (KeyCode.Escape)) {
@@ -76,7 +74,16 @@ public class EndGame : MonoBehaviour
 		for(int i = 0; i < 4; i++)
 		{
 			jod.spinDelta[i] = 0;
+			jod.hits [i] = 0;
 		}
+	}
+
+	IEnumerator restartGame(){
+		yield return new WaitForSeconds (0.5f);
+		notify.renderer.material.mainTexture = startTexture;
+		yield return new WaitForSeconds (0.5f);
+
+		Application.LoadLevel ("GamePlay");
 	}
 
 	public void SpinHandler (int controllerID, int delta)

@@ -27,6 +27,10 @@ public class SpaceShip : MonoBehaviour {
 	private bool isShield = false;
 
 	public TimeRecorder timeRecorder;
+
+	public GameObject[] spinnerPower;
+
+	public AudioClip[] audios;
 	// Use this for initialization
 	void Start () {
 
@@ -53,12 +57,16 @@ public class SpaceShip : MonoBehaviour {
 
 		if(isBlader){
 			blade.transform.Rotate(0, jod.spinDelta[bladeItem.colorChoice]*10, 0);
-			blade.transform.position = transform.position;
+			blade.transform.position = transform.position + new Vector3(0, 0.1f, 0);
 
 			if(Mathf.Abs(jod.spinDelta[bladeItem.colorChoice]) > 0){
 				isBladerWorking = true;
+				audio.clip = audios[2];
+				audio.loop = true;
+				audio.Play();
 			} else{
 				isBladerWorking = false;
+				audio.Stop();
 			}
 		} 
 
@@ -93,6 +101,9 @@ public class SpaceShip : MonoBehaviour {
 	void OnCollisionEnter(Collision collision) {
 		if (collision.collider.tag == "Meteor") {
 			Debug.Log("Collide! Loss!");
+			audio.clip = audios[0];
+			if(!audio.isPlaying)
+				audio.Play();
 			rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 			GameObject explosionClone = Instantiate(explosion) as GameObject;
 			explosionClone.SetActive(true);
@@ -101,8 +112,12 @@ public class SpaceShip : MonoBehaviour {
 			StartCoroutine(restartGame());
 		} else if (collision.collider.tag == "LaserItem") {
 			isLazer = true;
+			audio.clip = audios[1];
+			audio.loop = true;
+			audio.Play();
 			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position, new Vector3(100, 0, -100) - transform.position);
 			lazer.SetActive (true);
+			spinnerPower[laserItem.colorChoice].SetActive(true);
 			StartCoroutine(turnOffLazer());
 			collision.gameObject.SetActive(false);
 		} else if (collision.collider.tag == "BladeItem") {
@@ -112,6 +127,8 @@ public class SpaceShip : MonoBehaviour {
 			collision.gameObject.SetActive(false);
 			GetComponent<SphereCollider>().enabled = false;
 			blade.SetActive(true);
+			spinnerPower[bladeItem.colorChoice].SetActive(true);
+
 		} else if (collision.collider.tag == "ShieldItem") {
 			isShield = true;
 			StartCoroutine(turnOffShield());
@@ -164,6 +181,9 @@ public class SpaceShip : MonoBehaviour {
 		isLazer = false;
 		lazer.SetActive (false);
 		lazerAngle = 0;
+		spinnerPower[laserItem.colorChoice].SetActive(false);
+		audio.loop = false;
+		audio.Stop();
 	}
 
 	
@@ -179,9 +199,12 @@ public class SpaceShip : MonoBehaviour {
 		isBlader = false;
 		blade.SetActive (false);
 		GetComponent<SphereCollider>().enabled = true;
-
+		audio.loop = false;
+		audio.Stop();
 		GetComponent<SphereCollider> ().radius = 0.4f;
 		transform.rotation = Quaternion.identity;
+		spinnerPower[bladeItem.colorChoice].SetActive(false);
+
 	}
 
 	IEnumerator destroyExplosion(GameObject explosionClone){

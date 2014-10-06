@@ -8,7 +8,8 @@ public class EnemyCreator : MonoBehaviour
 	public int meteorcount = 1;
 	int limitedNumer = 50;
 	public ObjectPool objectPool;
-
+	public int speed = 10;
+	public float waitTime = 0.5f;
 	// Use this for initialization
 	void Start ()
 	{
@@ -18,7 +19,6 @@ public class EnemyCreator : MonoBehaviour
 	}
 
 	IEnumerator createMeteorOutside(){
-		float waitTime = 1f;
 		while(true){
 			SpawnMeteorOutside1 ();
 			SpawnMeteorOutside2 ();
@@ -43,7 +43,7 @@ public class EnemyCreator : MonoBehaviour
 		g.transform.position = new Vector3 (60, 0, Random.Range(-35, 35));
 		g.GetComponent<Meteor> ().firstTime = true;
 		g.SetActive (true);
-		g.rigidbody.velocity = new Vector3 (-30, 0, Random.Range(-20, 20));
+		g.rigidbody.velocity = new Vector3 (-speed, 0, Random.Range(-20, 20));
 		meteorcount += 1;
 	}
 
@@ -53,7 +53,7 @@ public class EnemyCreator : MonoBehaviour
 		g.transform.position = new Vector3 (-60, 0, Random.Range(-35, 35));
 		g.GetComponent<Meteor> ().firstTime = true;
 		g.SetActive (true);
-		g.rigidbody.velocity = new Vector3 (30, 0, Random.Range(-20, 20));
+		g.rigidbody.velocity = new Vector3 (speed, 0, Random.Range(-20, 20));
 		meteorcount += 1;
 	}
 
@@ -63,7 +63,7 @@ public class EnemyCreator : MonoBehaviour
 		g.transform.position = new Vector3 (Random.Range(-35, 35), 0, 60);
 		g.GetComponent<Meteor> ().firstTime = true;
 		g.SetActive (true);
-		g.rigidbody.velocity = new Vector3 (Random.Range(-20, 20), 0, -30);
+		g.rigidbody.velocity = new Vector3 (Random.Range(-20, 20), 0, -speed);
 		meteorcount += 1;
 	}
 
@@ -73,7 +73,7 @@ public class EnemyCreator : MonoBehaviour
 		g.transform.position = new Vector3 (Random.Range(-35, 35), 0, -60);
 		g.GetComponent<Meteor> ().firstTime = true;
 		g.SetActive (true);
-		g.rigidbody.velocity = new Vector3 (Random.Range(-20, 20), 0, 30);
+		g.rigidbody.velocity = new Vector3 (Random.Range(-20, 20), 0, speed);
 		meteorcount += 1;
 	}
 }

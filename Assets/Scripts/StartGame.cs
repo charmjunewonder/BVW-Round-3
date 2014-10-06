@@ -56,14 +56,13 @@ public class StartGame : MonoBehaviour
 			if (jod.hits [i] > 0) {
 				drums [i].renderer.material.mainTexture = hittedDrumTexture [i];
 				colorNotify[i].SetActive(true);
-			} else {
-				drums [i].renderer.material.mainTexture = normalDrumTexture [i];
+				audio.Play();
 
-			}
+			} 
 		}
 
 
-		if ((jod.hits [0] > 0) && (jod.hits [1] > 0) && (jod.hits [2] > 0) && (jod.hits [3] > 0)) {
+		if ((colorNotify[0].activeSelf) && (colorNotify[1].activeSelf) && (colorNotify[2].activeSelf) && (colorNotify[3].activeSelf)) {
 			begin = true;
 			fourColorNotify.SetActive(false);
 
@@ -76,6 +75,7 @@ public class StartGame : MonoBehaviour
 		for(int i = 0; i < 4; i++)
 		{
 			jod.spinDelta[i] = 0;
+			jod.hits [i] = 0;
 		}
 	}
 

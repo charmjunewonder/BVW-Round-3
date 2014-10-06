@@ -16,6 +16,7 @@ public class TimeRecorder : MonoBehaviour {
 		for(int i = 0; i < 4; ++i){
 			currentScore[i].renderer.material.mainTexture = numbersTexture[0];
 		}
+
 	}
 	
 	// Update is called once per frame
