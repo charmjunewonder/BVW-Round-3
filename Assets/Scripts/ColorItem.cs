@@ -19,6 +19,5 @@ public class ColorItem : MonoBehaviour {
 	public void setColor(int colorNum){
 		colorChoice = colorNum;
 		renderer.material.mainTexture = colorTextures [colorChoice];
-		attack.renderer.material.mainTexture = colorAttackTextures [colorChoice];
 	}
 }

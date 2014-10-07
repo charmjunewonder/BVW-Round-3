@@ -11,6 +11,7 @@ public class SpaceShip : MonoBehaviour {
 
 	public GameObject lazer;
 	public GameObject lazerTrail;
+	public Texture[] laserColorAttackTextures;
 	public ColorItem laserItem;
 	private float lazerAngle = 45;
 	private bool isLazer = false;
@@ -18,6 +19,7 @@ public class SpaceShip : MonoBehaviour {
 
 	public ColorItem bladeItem;
 	public GameObject blade;
+	public Texture[] bladeColorAttackTextures;
 	private bool isBlader = false;
 	public bool isBladerWorking = false;
 
@@ -110,27 +112,31 @@ public class SpaceShip : MonoBehaviour {
 					collision.collider.gameObject.SetActive(false);
 					enemyCreator.meteorcount--;
 				}
+			} else if(isShield){
+
 			} else{
-				Debug.Log("Collide! Loss!");
-				audio.clip = audios[0];
-				if(!audio.isPlaying)
-					audio.Play();
-				rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-				GameObject explosionClone = Instantiate(explosion) as GameObject;
-				explosionClone.SetActive(true);
-				explosionClone.transform.parent = transform;
-				explosionClone.transform.position = transform.position;
-				StartCoroutine(restartGame());
+//				Debug.Log("Collide! Loss!");
+//				audio.clip = audios[0];
+//				if(!audio.isPlaying)
+//					audio.Play();
+//				rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+//				GameObject explosionClone = Instantiate(explosion) as GameObject;
+//				explosionClone.SetActive(true);
+//				explosionClone.transform.parent = transform;
+//				explosionClone.transform.position = transform.position;
+//				StartCoroutine(restartGame());
 			}
 		} else if (collision.collider.tag == "LaserItem") {
+			if(isLazer || isBlader || isShield){
+				return;
+			}
 			isLazer = true;
 			colorChoice = laserItem.colorChoice;
 			audio.clip = audios[1];
 			audio.loop = true;
 			audio.Play();
 
-//			renderer.material.mainTexture = colorTextures [colorChoice];
-//			attack.renderer.material.mainTexture = colorAttackTextures [colorChoice];
+			lazerTrail.renderer.material.mainTexture = laserColorAttackTextures [colorChoice];
 
 			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position, new Vector3(100, 0, -100) - transform.position);
 			lazer.SetActive (true);
@@ -138,21 +144,29 @@ public class SpaceShip : MonoBehaviour {
 			StartCoroutine(turnOffLazer());
 			collision.gameObject.SetActive(false);
 		} else if (collision.collider.tag == "BladeItem") {
+			if(isLazer || isBlader || isShield){
+				return;
+			}
 			isBlader = true;
 			colorChoice = bladeItem.colorChoice;
 			StartCoroutine(turnOffBlader());
 			collision.gameObject.SetActive(false);
+			blade.renderer.material.mainTexture = bladeColorAttackTextures [colorChoice];
 			//GetComponent<SphereCollider>().enabled = false;
 			GetComponent<SphereCollider> ().radius = 0.44f;
 			blade.SetActive(true);
 			spinnerPower[bladeItem.colorChoice].SetActive(true);
 
 		} else if (collision.collider.tag == "ShieldItem") {
+			if(isLazer || isBlader || isShield){
+				return;
+			}
 			isShield = true;
 			StartCoroutine(turnOffShield());
 			shield.SetActive(true);
-			GetComponent<SphereCollider>().enabled = false;
+			//GetComponent<SphereCollider>().enabled = false;
 			collision.gameObject.SetActive(false);
+			GetComponent<SphereCollider> ().radius = 0.5f;
 
 		} else if (collision.collider.tag == "BombItem") {
 			collision.gameObject.SetActive(false);
@@ -217,17 +231,19 @@ public class SpaceShip : MonoBehaviour {
 		yield return new WaitForSeconds(3.0f);
 		isShield = false;
 		shield.SetActive (false);
-		GetComponent<SphereCollider>().enabled = true;
+		//GetComponent<SphereCollider>().enabled = true;
+		GetComponent<SphereCollider> ().radius = 0.25f;
+
 	}
 	
 	IEnumerator turnOffBlader(){
 		yield return new WaitForSeconds(6.0f);
 		isBlader = false;
 		blade.SetActive (false);
-		GetComponent<SphereCollider>().enabled = true;
+		//GetComponent<SphereCollider>().enabled = true;
 		audio.loop = false;
 		audio.Stop();
-		GetComponent<SphereCollider> ().radius = 0.35f;
+		GetComponent<SphereCollider> ().radius = 0.25f;
 		transform.rotation = Quaternion.identity;
 		spinnerPower[bladeItem.colorChoice].SetActive(false);
 

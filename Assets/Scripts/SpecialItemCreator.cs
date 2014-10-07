@@ -29,9 +29,9 @@ public class SpecialItemCreator : MonoBehaviour {
 					specialItems[i].SetActive(true);
 					specialItems[i].GetComponent<SpecialItemDead>().dieInSeconds();
 				}
-				yield return new WaitForSeconds(3.0f);
+				yield return new WaitForSeconds(1.0f);
 			}
-			yield return new WaitForSeconds(10.0f);
+			yield return new WaitForSeconds(1.0f);
 		}
 	}
 
