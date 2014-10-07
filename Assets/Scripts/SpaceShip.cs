@@ -115,21 +115,21 @@ public class SpaceShip : MonoBehaviour {
 			} else if(isShield){
 
 			} else{
-//				Debug.Log("Collide! Loss!");
-//				audio.clip = audios[0];
-//				if(!audio.isPlaying)
-//					audio.Play();
-//				rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-//				GameObject explosionClone = Instantiate(explosion) as GameObject;
-//				explosionClone.SetActive(true);
-//				explosionClone.transform.parent = transform;
-//				explosionClone.transform.position = transform.position;
-//				StartCoroutine(restartGame());
+				Debug.Log("Collide! Loss!");
+				audio.clip = audios[0];
+				if(!audio.isPlaying)
+					audio.Play();
+				rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+				GameObject explosionClone = Instantiate(explosion) as GameObject;
+				explosionClone.SetActive(true);
+				explosionClone.transform.parent = transform;
+				explosionClone.transform.position = transform.position;
+				StartCoroutine(restartGame());
 			}
 		} else if (collision.collider.tag == "LaserItem") {
-			if(isLazer || isBlader || isShield){
-				return;
-			}
+//			if(isLazer || isBlader || isShield){
+//				return;
+//			}
 			isLazer = true;
 			colorChoice = laserItem.colorChoice;
 			audio.clip = audios[1];
@@ -144,9 +144,9 @@ public class SpaceShip : MonoBehaviour {
 			StartCoroutine(turnOffLazer());
 			collision.gameObject.SetActive(false);
 		} else if (collision.collider.tag == "BladeItem") {
-			if(isLazer || isBlader || isShield){
-				return;
-			}
+//			if(isLazer || isBlader || isShield){
+//				return;
+//			}
 			isBlader = true;
 			colorChoice = bladeItem.colorChoice;
 			StartCoroutine(turnOffBlader());
@@ -158,9 +158,9 @@ public class SpaceShip : MonoBehaviour {
 			spinnerPower[bladeItem.colorChoice].SetActive(true);
 
 		} else if (collision.collider.tag == "ShieldItem") {
-			if(isLazer || isBlader || isShield){
-				return;
-			}
+//			if(isLazer || isBlader || isShield){
+//				return;
+//			}
 			isShield = true;
 			StartCoroutine(turnOffShield());
 			shield.SetActive(true);
