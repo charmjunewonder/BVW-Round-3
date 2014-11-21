@@ -36,6 +36,9 @@ public class SpaceShip : MonoBehaviour {
 	public AudioClip[] audios;
 	public int colorChoice;
 
+	private int laserColorIndex = 0;
+	private int bladeColorIndex = 0;
+
 	// Use this for initialization
 	void Start () {
 
@@ -141,7 +144,10 @@ public class SpaceShip : MonoBehaviour {
 			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position, new Vector3(100, 0, -100) - transform.position);
 			lazer.SetActive (true);
 			spinnerPower[laserItem.colorChoice].SetActive(true);
-			StartCoroutine(turnOffLazer());
+			spinnerPower[laserColorIndex].SetActive(false);
+			StopCoroutine("turnOffLazer");
+			laserColorIndex = laserItem.colorChoice;
+			StartCoroutine("turnOffLazer");
 			collision.gameObject.SetActive(false);
 		} else if (collision.collider.tag == "BladeItem") {
 //			if(isLazer || isBlader || isShield){
@@ -149,7 +155,10 @@ public class SpaceShip : MonoBehaviour {
 //			}
 			isBlader = true;
 			colorChoice = bladeItem.colorChoice;
-			StartCoroutine(turnOffBlader());
+			StopCoroutine("turnOffBlader");
+			spinnerPower[bladeColorIndex].SetActive(false);
+			bladeColorIndex = bladeItem.colorChoice;
+			StartCoroutine("turnOffBlader");
 			collision.gameObject.SetActive(false);
 			blade.renderer.material.mainTexture = bladeColorAttackTextures [colorChoice];
 			//GetComponent<SphereCollider>().enabled = false;

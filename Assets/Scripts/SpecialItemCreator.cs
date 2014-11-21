@@ -20,7 +20,7 @@ public class SpecialItemCreator : MonoBehaviour {
 			yield return new WaitForSeconds(3.0f);
 
 			for(int i = 0; i < specialItems.Length; ++i){
-				if(!specialItems[i].activeSelf){
+				//if(!specialItems[i].activeSelf){
 					if(i < 2){
 						int colorChoice = Random.Range(0,4);
 						specialItems[i].GetComponent<ColorItem>().setColor(colorChoice);
@@ -28,8 +28,8 @@ public class SpecialItemCreator : MonoBehaviour {
 					specialItems[i].transform.position = new Vector3 ((float)Random.Range (-17, 17), 0.5f, (float)Random.Range (-17, 17));
 					specialItems[i].SetActive(true);
 					specialItems[i].GetComponent<SpecialItemDead>().dieInSeconds();
-				}
-				yield return new WaitForSeconds(3.0f);
+				//}
+				yield return new WaitForSeconds(3f);
 			}
 			yield return new WaitForSeconds(10.0f);
 		}
