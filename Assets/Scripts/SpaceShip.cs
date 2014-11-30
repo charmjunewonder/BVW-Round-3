@@ -107,12 +107,12 @@ public class SpaceShip : MonoBehaviour {
 				audio.clip = audios[0];
 				if(!audio.isPlaying)
 					audio.Play();
-				// rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+				rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 				GameObject explosionClone = Instantiate(explosion) as GameObject;
 				explosionClone.SetActive(true);
 				explosionClone.transform.parent = transform;
 				explosionClone.transform.position = transform.position;
-				// StartCoroutine(restartGame());
+				StartCoroutine(restartGame());
 			}
 		} else if (collision.collider.tag == "LaserItem") {
 //			if(isLazer || isBlader || isShield){
@@ -183,7 +183,7 @@ public class SpaceShip : MonoBehaviour {
 	}
 
 	IEnumerator turnOffLazer(){
-		yield return new WaitForSeconds(10.0f);
+		yield return new WaitForSeconds(5.0f);
 		isLazer = false;
 		lazer.SetActive (false);
 		lazerAngle = 0;
@@ -215,7 +215,7 @@ public class SpaceShip : MonoBehaviour {
 	}
 	
 	IEnumerator turnOffBlader(){
-		yield return new WaitForSeconds(10.0f);
+		yield return new WaitForSeconds(6.0f);
 		isBlader = false;
 		blade.SetActive (false);
 		//GetComponent<SphereCollider>().enabled = true;
