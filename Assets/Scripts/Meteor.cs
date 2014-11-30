@@ -11,6 +11,7 @@ public class Meteor : MonoBehaviour {
 	}
 	
 	void OnCollisionEnter(Collision collision) {
+		transform.LookAt(transform.position+rigidbody.velocity);
 		if (collision.collider.tag == "Bound") {
 			if(firstTime){
 				firstTime = false;

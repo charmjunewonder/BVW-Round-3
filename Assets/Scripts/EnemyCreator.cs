@@ -60,6 +60,7 @@ public class EnemyCreator : MonoBehaviour
 		g.transform.position = new Vector3 (60, 0, Random.Range(-35, 35));
 		g.SetActive (true);
 		g.rigidbody.velocity = new Vector3 (-speed, 0, Random.Range(-speed, speed));
+		g.transform.LookAt(g.transform.position+g.rigidbody.velocity);
 		meteorcount += 1;
 	}
 
@@ -70,6 +71,7 @@ public class EnemyCreator : MonoBehaviour
 		g.GetComponent<Meteor> ().firstTime = true;
 		g.SetActive (true);
 		g.rigidbody.velocity = new Vector3 (speed, 0, Random.Range(-speed, speed));
+		g.transform.LookAt(g.transform.position+g.rigidbody.velocity);
 		meteorcount += 1;
 	}
 
@@ -80,6 +82,7 @@ public class EnemyCreator : MonoBehaviour
 		g.GetComponent<Meteor> ().firstTime = true;
 		g.SetActive (true);
 		g.rigidbody.velocity = new Vector3 (Random.Range(-speed, speed), 0, -speed);
+		g.transform.LookAt(g.transform.position+g.rigidbody.velocity);
 		meteorcount += 1;
 	}
 
@@ -90,6 +93,7 @@ public class EnemyCreator : MonoBehaviour
 		g.GetComponent<Meteor> ().firstTime = true;
 		g.SetActive (true);
 		g.rigidbody.velocity = new Vector3 (Random.Range(-speed, speed), 0, speed);
+		g.transform.LookAt(g.transform.position+g.rigidbody.velocity);
 		meteorcount += 1;
 	}
 }

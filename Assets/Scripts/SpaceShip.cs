@@ -56,7 +56,8 @@ public class SpaceShip : MonoBehaviour {
 			RaycastHit[] hits;
 			int meteorLayer = 1 << 8;
 			hits = Physics.RaycastAll(transform.position, direction, 100.0F, meteorLayer);
-			Debug.Log(hits.Length);
+			//Debug.Log(hits.Length);
+			//Debug.DrawRay(transform.position, direction, Color.green, 10);
 
 			for(int i = 0; i < hits.Length; ++i){
 				hits[i].collider.gameObject.SetActive(false);
