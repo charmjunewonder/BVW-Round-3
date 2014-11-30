@@ -47,7 +47,7 @@ public class SpaceShip : MonoBehaviour {
 	void Update () {
 		if(isLazer){
 			lazerAngle += jod.spinDelta[laserColorIndex]/2;
-			float angle = lazerAngle*angleToRadian / 2;
+			float angle = lazerAngle*angleToRadian / 2 * 50 * Time.deltaTime;
 			//lazerAngle = Mathf.Repeat(lazerAngle, 360);
 			Vector3 direction = new Vector3(100* Mathf.Cos(angle), 0, -100* Mathf.Sin(angle));
 			Vector3 targetPosition = direction + transform.position;
@@ -56,8 +56,8 @@ public class SpaceShip : MonoBehaviour {
 			RaycastHit[] hits;
 			int meteorLayer = 1 << 8;
 			hits = Physics.RaycastAll(transform.position, direction, 100.0F, meteorLayer);
-			//Debug.Log(hits.Length);
-			//Debug.DrawRay(transform.position, direction, Color.green, 10);
+			Debug.Log(Time.deltaTime);
+			Debug.DrawRay(transform.position, direction, Color.green, 10);
 
 			for(int i = 0; i < hits.Length; ++i){
 				hits[i].collider.gameObject.SetActive(false);
@@ -192,11 +192,17 @@ public class SpaceShip : MonoBehaviour {
 		audio.Stop();
 	}
 
+	float Distance2D(Vector3 a, Vector3 b){
+		float xd = a.x - b.x;
+		float zd = a.z - b.z;
+		return Mathf.Sqrt(xd*xd + zd*zd);
+	}
+
 	IEnumerator killWithBomb(){
 		for(int n = 0; n < 3; ++n){
 			GameObject[] meteors = GameObject.FindGameObjectsWithTag ("Meteor");
 			for (int i=0; i<meteors.Length; i++) {
-				if(Vector3.Distance(meteors[i].transform.position, transform.position) < 13){
+				if(Distance2D(meteors[i].transform.position, transform.position) < 30){
 					meteors [i].gameObject.SetActive(false);
 					enemyCreator.meteorcount--;
 				}
