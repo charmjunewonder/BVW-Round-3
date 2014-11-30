@@ -7,9 +7,9 @@ using ETC.Platforms;
 
 public class JamoKey : MonoBehaviour
 {
-	private KeyCode[] spinLeft = {KeyCode.A, KeyCode.Keypad7, KeyCode.Keypad4, KeyCode.Keypad1};
-	private KeyCode[] spinRight = {KeyCode.D, KeyCode.Keypad9, KeyCode.Keypad6, KeyCode.Keypad3};
-	private KeyCode[] hit = {KeyCode.S, KeyCode.Keypad8, KeyCode.Keypad5, KeyCode.Keypad2};
+	private KeyCode[] spinLeft = {KeyCode.A, KeyCode.Keypad4, KeyCode.Keypad1, KeyCode.Z};
+	private KeyCode[] spinRight = {KeyCode.D, KeyCode.Keypad6, KeyCode.Keypad3, KeyCode.C};
+	private KeyCode[] hit = {KeyCode.S, KeyCode.Keypad5, KeyCode.Keypad2, KeyCode.X};
 	
 	public JamoDrum jamoDrum;
 	public int spinsPerFrame;

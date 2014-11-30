@@ -34,7 +34,6 @@ public class SpaceShip : MonoBehaviour {
 	public GameObject[] spinnerPower;
 
 	public AudioClip[] audios;
-	public int colorChoice;
 
 	private int laserColorIndex = 0;
 	private int bladeColorIndex = 0;
@@ -47,7 +46,7 @@ public class SpaceShip : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(isLazer){
-			lazerAngle += jod.spinDelta[colorChoice]/2;
+			lazerAngle += jod.spinDelta[laserColorIndex]/2;
 			float angle = lazerAngle*angleToRadian / 2;
 			//lazerAngle = Mathf.Repeat(lazerAngle, 360);
 			Vector3 direction = new Vector3(100* Mathf.Cos(angle), 0, -100* Mathf.Sin(angle));
@@ -66,10 +65,10 @@ public class SpaceShip : MonoBehaviour {
 		} 
 
 		if(isBlader){
-			blade.transform.Rotate(0, jod.spinDelta[colorChoice]*10, 0);
+			blade.transform.Rotate(0, jod.spinDelta[bladeColorIndex]*10, 0);
 			blade.transform.position = transform.position + new Vector3(0, 0.1f, 0);
 
-			if(Mathf.Abs(jod.spinDelta[colorChoice]) > 0){
+			if(Mathf.Abs(jod.spinDelta[bladeColorIndex]) > 0){
 				isBladerWorking = true;
 				audio.clip = audios[2];
 				audio.loop = true;
@@ -119,19 +118,17 @@ public class SpaceShip : MonoBehaviour {
 //				return;
 //			}
 			isLazer = true;
-			colorChoice = laserItem.colorChoice;
+			laserColorIndex = laserItem.colorChoice;
 			audio.clip = audios[1];
 			audio.loop = true;
 			audio.Play();
 
-			lazerTrail.renderer.material.mainTexture = laserColorAttackTextures [colorChoice];
+			lazerTrail.renderer.material.mainTexture = laserColorAttackTextures [laserColorIndex];
 
 			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position, new Vector3(100, 0, -100) - transform.position);
 			lazer.SetActive (true);
 			spinnerPower[laserItem.colorChoice].SetActive(true);
-			spinnerPower[laserColorIndex].SetActive(false);
 			StopCoroutine("turnOffLazer");
-			laserColorIndex = laserItem.colorChoice;
 			StartCoroutine("turnOffLazer");
 			collision.gameObject.SetActive(false);
 		} else if (collision.collider.tag == "BladeItem") {
@@ -139,13 +136,11 @@ public class SpaceShip : MonoBehaviour {
 //				return;
 //			}
 			isBlader = true;
-			colorChoice = bladeItem.colorChoice;
-			StopCoroutine("turnOffBlader");
-			spinnerPower[bladeColorIndex].SetActive(false);
 			bladeColorIndex = bladeItem.colorChoice;
+			StopCoroutine("turnOffBlader");
 			StartCoroutine("turnOffBlader");
 			collision.gameObject.SetActive(false);
-			blade.renderer.material.mainTexture = bladeColorAttackTextures [colorChoice];
+			blade.renderer.material.mainTexture = bladeColorAttackTextures [bladeColorIndex];
 			//GetComponent<SphereCollider>().enabled = false;
 			GetComponent<SphereCollider> ().radius = 0.44f;
 			blade.SetActive(true);
@@ -172,15 +167,26 @@ public class SpaceShip : MonoBehaviour {
 			audio.Play ();
 			StartCoroutine(killWithBomb());
 			StartCoroutine(destroyExplosion(explosionClone));
-		} 
+		}
+		fixInstructionUI();
+	}
+
+	void fixInstructionUI(){
+		for(int i = 0; i < 4; i++){
+			spinnerPower[i].SetActive(false);
+		}
+		if(isLazer)
+			spinnerPower[laserColorIndex].SetActive(true);
+		if(isBlader)
+			spinnerPower[bladeColorIndex].SetActive(true);
 	}
 
 	IEnumerator turnOffLazer(){
-		yield return new WaitForSeconds(5.0f);
+		yield return new WaitForSeconds(10.0f);
 		isLazer = false;
 		lazer.SetActive (false);
 		lazerAngle = 0;
-		spinnerPower[laserItem.colorChoice].SetActive(false);
+		spinnerPower[laserColorIndex].SetActive(false);
 		audio.loop = false;
 		audio.Stop();
 	}
@@ -208,7 +214,7 @@ public class SpaceShip : MonoBehaviour {
 	}
 	
 	IEnumerator turnOffBlader(){
-		yield return new WaitForSeconds(6.0f);
+		yield return new WaitForSeconds(10.0f);
 		isBlader = false;
 		blade.SetActive (false);
 		//GetComponent<SphereCollider>().enabled = true;
@@ -216,7 +222,7 @@ public class SpaceShip : MonoBehaviour {
 		audio.Stop();
 		GetComponent<SphereCollider> ().radius = 0.25f;
 		transform.rotation = Quaternion.identity;
-		spinnerPower[bladeItem.colorChoice].SetActive(false);
+		spinnerPower[bladeColorIndex].SetActive(false);
 
 	}
 

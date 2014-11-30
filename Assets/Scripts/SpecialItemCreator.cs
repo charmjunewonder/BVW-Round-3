@@ -17,7 +17,7 @@ public class SpecialItemCreator : MonoBehaviour {
 
 	IEnumerator createSpecialItem(){
 		while(true){
-			yield return new WaitForSeconds(3.0f);
+			yield return new WaitForSeconds(0.5f);
 
 			for(int i = 0; i < specialItems.Length; ++i){
 				//if(!specialItems[i].activeSelf){
@@ -29,9 +29,9 @@ public class SpecialItemCreator : MonoBehaviour {
 					specialItems[i].SetActive(true);
 					specialItems[i].GetComponent<SpecialItemDead>().dieInSeconds();
 				//}
-				yield return new WaitForSeconds(3f);
+				//yield return new WaitForSeconds(3f);
 			}
-			yield return new WaitForSeconds(10.0f);
+			yield return new WaitForSeconds(3f);
 		}
 	}
 
