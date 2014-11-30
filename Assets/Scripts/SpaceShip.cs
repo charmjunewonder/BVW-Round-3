@@ -80,21 +80,6 @@ public class SpaceShip : MonoBehaviour {
 			}
 		} 
 
-		/*if(isBomb && Mathf.Abs(jod.spinDelta[1]) > 0){
-			GameObject explosionClone = Instantiate(bombExplosion) as GameObject;
-			explosionClone.SetActive(true);
-			explosionClone.transform.parent = transform;
-			explosionClone.transform.position = transform.position;
-			GameObject[] meteors = GameObject.FindGameObjectsWithTag ("Meteor");
-			for (int i=0; i<meteors.Length; i++) {
-				if(Vector3.Distance(meteors[i].transform.position, transform.position) < 5){
-					meteors [i].gameObject.SetActive(false);
-					enemyCreator.meteorcount--;
-				}
-			}
-			isBomb = false;
-			StartCoroutine(destroyExplosion(explosionClone));
-		}*/
 		if(isShield){
 			shield.SetActive(true);
 			shield.transform.position = transform.position;
@@ -122,12 +107,12 @@ public class SpaceShip : MonoBehaviour {
 				audio.clip = audios[0];
 				if(!audio.isPlaying)
 					audio.Play();
-				rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+				// rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 				GameObject explosionClone = Instantiate(explosion) as GameObject;
 				explosionClone.SetActive(true);
 				explosionClone.transform.parent = transform;
 				explosionClone.transform.position = transform.position;
-				StartCoroutine(restartGame());
+				// StartCoroutine(restartGame());
 			}
 		} else if (collision.collider.tag == "LaserItem") {
 //			if(isLazer || isBlader || isShield){
@@ -187,30 +172,7 @@ public class SpaceShip : MonoBehaviour {
 			audio.Play ();
 			StartCoroutine(killWithBomb());
 			StartCoroutine(destroyExplosion(explosionClone));
-		} /*else if (collision.collider.tag == "RedItem") {
-			isLazer = true;
-			lazer.GetComponent<LazerAttackTarget> ().setTarget (transform.position, new Vector3(100, 0, -100) - transform.position);
-			lazer.SetActive (true);
-			StartCoroutine(turnOffLazer());
-			collision.gameObject.SetActive(false);
-		} else if (collision.collider.tag == "YellowItem") {
-			isBlader = true;
-			renderer.material.mainTexture = bladerTexture [1];
-			GetComponent<SphereCollider> ().radius = 0.58f;
-			StartCoroutine(turnOffBlader());
-			collision.gameObject.SetActive(false);
-
-		} else if (collision.collider.tag == "BlueItem") {
-			isBomb = true;
-			collision.gameObject.SetActive(false);
-
-		} else if (collision.collider.tag == "GreenItem") {
-			isShield = true;
-			StartCoroutine(turnOffShield());
-			collision.gameObject.SetActive(false);
-
-		}*/
-
+		} 
 	}
 
 	IEnumerator turnOffLazer(){
