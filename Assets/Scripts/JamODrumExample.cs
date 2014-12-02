@@ -49,7 +49,7 @@ public class JamODrumExample : MonoBehaviour {
 //				Debug.Log("Spin "+i+" : "+jod.spinDelta[i]);
 				spinnerAngle[i] = Mathf.Repeat(spinnerAngle[i], 360);
 				Vector3 rot = spinners[i].transform.rotation.eulerAngles;
-				rot.y = initAngle[i] + spinnerAngle[i];
+				rot.y = initAngle[i] - spinnerAngle[i];
 				spinners[i].transform.rotation = Quaternion.Euler(rot);
 
 			}

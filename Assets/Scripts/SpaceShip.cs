@@ -46,8 +46,8 @@ public class SpaceShip : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(isLazer){
-			lazerAngle += jod.spinDelta[laserColorIndex]/2;
-			float angle = lazerAngle*angleToRadian / 2 * 50 * Time.deltaTime;
+			lazerAngle -= jod.spinDelta[laserColorIndex]/2;
+			float angle = lazerAngle*angleToRadian / 2 ;//* 50 * Time.deltaTime;
 			//lazerAngle = Mathf.Repeat(lazerAngle, 360);
 			Vector3 direction = new Vector3(100* Mathf.Cos(angle), 0, -100* Mathf.Sin(angle));
 			Vector3 targetPosition = direction + transform.position;
@@ -66,7 +66,7 @@ public class SpaceShip : MonoBehaviour {
 		} 
 
 		if(isBlader){
-			blade.transform.Rotate(0, jod.spinDelta[bladeColorIndex]*10, 0);
+			blade.transform.Rotate(0, -jod.spinDelta[bladeColorIndex]*10, 0);
 			blade.transform.position = transform.position + new Vector3(0, 0.1f, 0);
 
 			if(Mathf.Abs(jod.spinDelta[bladeColorIndex]) > 0){
