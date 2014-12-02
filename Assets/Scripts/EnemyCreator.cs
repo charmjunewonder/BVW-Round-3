@@ -57,6 +57,7 @@ public class EnemyCreator : MonoBehaviour
 	{
 		GameObject g = objectPool.GetObjectFromPool();
 		g.GetComponent<Meteor> ().firstTime = true;
+		g.renderer.enabled = true;
 		g.transform.position = new Vector3 (60, 0, Random.Range(-35, 35));
 		g.SetActive (true);
 		g.rigidbody.velocity = new Vector3 (-speed, 0, Random.Range(-speed, speed));
@@ -68,6 +69,7 @@ public class EnemyCreator : MonoBehaviour
 	{
 		GameObject g = objectPool.GetObjectFromPool();
 		g.transform.position = new Vector3 (-60, 0, Random.Range(-35, 35));
+		g.renderer.enabled = true;
 		g.GetComponent<Meteor> ().firstTime = true;
 		g.SetActive (true);
 		g.rigidbody.velocity = new Vector3 (speed, 0, Random.Range(-speed, speed));
@@ -79,6 +81,7 @@ public class EnemyCreator : MonoBehaviour
 	{
 		GameObject g = objectPool.GetObjectFromPool();
 		g.transform.position = new Vector3 (Random.Range(-35, 35), 0, 60);
+		g.renderer.enabled = true;
 		g.GetComponent<Meteor> ().firstTime = true;
 		g.SetActive (true);
 		g.rigidbody.velocity = new Vector3 (Random.Range(-speed, speed), 0, -speed);
@@ -90,6 +93,7 @@ public class EnemyCreator : MonoBehaviour
 	{
 		GameObject g = objectPool.GetObjectFromPool();
 		g.transform.position = new Vector3 (Random.Range(-35, 35), 0, -60);
+		g.renderer.enabled = true;
 		g.GetComponent<Meteor> ().firstTime = true;
 		g.SetActive (true);
 		g.rigidbody.velocity = new Vector3 (Random.Range(-speed, speed), 0, speed);

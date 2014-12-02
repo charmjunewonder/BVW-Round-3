@@ -55,12 +55,14 @@ public class SpaceShip : MonoBehaviour {
 
 			RaycastHit[] hits;
 			int meteorLayer = 1 << 8;
-			hits = Physics.RaycastAll(transform.position, direction, 100.0F, meteorLayer);
-			Debug.Log(Time.deltaTime);
-			Debug.DrawRay(transform.position, direction, Color.green, 10);
+			hits = Physics.SphereCastAll(transform.position, 0.8f, direction, 100.0F, meteorLayer);
+
+			//Debug.Log(Time.deltaTime);
+			//Debug.DrawRay(transform.position, direction, Color.green, 10);
 
 			for(int i = 0; i < hits.Length; ++i){
-				hits[i].collider.gameObject.SetActive(false);
+				//hits[i].collider.gameObject.SetActive(false);
+				hits[i].collider.gameObject.GetComponent<Meteor>().DieWithAnimation();
 				enemyCreator.meteorcount--;
 			}
 		} 
@@ -97,7 +99,8 @@ public class SpaceShip : MonoBehaviour {
 		if (collision.collider.tag == "Meteor") {
 			if(isBlader){
 				if(isBladerWorking){
-					collision.collider.gameObject.SetActive(false);
+					collision.collider.gameObject.GetComponent<Meteor>().DieWithAnimation();
+					//collision.collider.gameObject.SetActive(false);
 					enemyCreator.meteorcount--;
 				}
 			} else if(isShield){
@@ -204,6 +207,7 @@ public class SpaceShip : MonoBehaviour {
 			for (int i=0; i<meteors.Length; i++) {
 				if(Distance2D(meteors[i].transform.position, transform.position) < 30){
 					meteors [i].gameObject.SetActive(false);
+					//meteors [i].gameObject.GetComponent<Meteor>().DieWithAnimation();
 					enemyCreator.meteorcount--;
 				}
 			}

@@ -51,15 +51,15 @@ public class SpecialItemCreator : MonoBehaviour {
 			}
 			for(int j = 0; j < 4; j++){
 				if(Distance2D(pos, specialItems[j].transform.position) < 10){
-					Debug.Log("item" + Distance2D(pos, specialItems[j].transform.position));
+					// Debug.Log("item" + Distance2D(pos, specialItems[j].transform.position));
 					isGood &= false;
 				}
 			}
 			if(isGood){
-				Debug.Log("space" + Distance2D(pos, spaceShip.transform.position));
-				for(int j = 0; j < 4; j++){
-					Debug.Log("item" + Distance2D(pos, specialItems[j].transform.position));
-				}
+				// Debug.Log("space" + Distance2D(pos, spaceShip.transform.position));
+				// for(int j = 0; j < 4; j++){
+					// Debug.Log("item" + Distance2D(pos, specialItems[j].transform.position));
+				// }
 				return pos;
 			}
 		}
